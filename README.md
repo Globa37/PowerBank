@@ -15,6 +15,7 @@ python3 -m http.server 8000   # lokal ansehen: http://localhost:8000
 | --- | --- |
 | `index.html` | Landingpage. Der Hero *ist* der Konfigurator — Farbwahl, Preis und Kaufbutton stehen über der Falz. CSS und JS liegen inline. |
 | `assets/checkout.js` | Anbindung an den Zahlungsanbieter. Einzige Stelle mit Preis und Artikeldaten. |
+| `index.html` → `#material` | Zwei Detailaufnahmen (Makro 07, Magnetring 04). Echte Produktfotos tragen den Eindruck von Wertigkeit weiter als jeder Effekt. |
 | `assets/page.css` | Stylesheet der Unterseiten. Gleiche Tokens wie `index.html`. |
 | `assets/fonts/` | Inter, Inter Tight, JetBrains Mono — lokal, damit keine Besucher-IP an Google geht. |
 | `assets/img/` | Produktbilder in mehreren Breiten als WebP, mit JPG/PNG als Rückfall. |
@@ -32,9 +33,8 @@ Signalwirkung.
 
 ### Bilder
 
-`assets/img/` enthält die fertigen Ableitungen. Die Bilder 05 (Hero iPhone),
-06 (Desk), 07 (Makro) und 09 (Travel) sind derzeit ungenutzt und liegen als
-Reserve bereit. Die Erzeugungsskripte (`scripts/build-images.py`,
+`assets/img/` enthält die fertigen Ableitungen. Ungenutzt und als Reserve
+vorhanden sind noch 05 (Hero iPhone), 06 (Desk) und 09 (Travel). Die Erzeugungsskripte (`scripts/build-images.py`,
 `scripts/fetch-fonts.py`) sind in älteren Kommentaren erwähnt, aber nie ins
 Repo gelangt — wer die Bilder neu ableiten will, muss sie neu schreiben.
 
