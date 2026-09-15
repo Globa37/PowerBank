@@ -38,6 +38,34 @@ Reserve bereit. Die Erzeugungsskripte (`scripts/build-images.py`,
 `scripts/fetch-fonts.py`) sind in älteren Kommentaren erwähnt, aber nie ins
 Repo gelangt — wer die Bilder neu ableiten will, muss sie neu schreiben.
 
+## Deploy zu Vercel
+
+Der Ordner ist eine statische Seite ohne Build. Vercel erkennt das von selbst.
+
+1. [vercel.com/new](https://vercel.com/new) öffnen und dieses GitHub-Repo importieren.
+2. Framework Preset: **Other**. Build Command und Output Directory leer lassen.
+3. Deploy. Nach etwa einer Minute steht die Seite unter
+   `https://<projektname>.vercel.app` — dieser Link ist öffentlich und lässt
+   sich weitergeben.
+
+Jeder Push auf `main` erzeugt danach ein neues Produktiv-Deployment, jeder
+Push auf einen anderen Branch eine Preview-URL.
+
+### Was `vercel.json` festlegt
+
+- **Schriften** ein Jahr `immutable` — die Dateinamen tragen einen Hash, sie
+  ändern sich nie unbemerkt.
+- **Bilder** 30 Tage mit `stale-while-revalidate`, falls doch ein Motiv
+  getauscht wird.
+- **HTML** ohne Cache. Sonst sehen Besucher nach einer Preisänderung noch
+  tagelang den alten Preis.
+- `cleanUrls` steht bewusst auf `false`. Es würde `/versand.html` auf
+  `/versand` umleiten — die `canonical`-Tags und die `sitemap.xml` nennen aber
+  die `.html`-Adressen. Wer die kurzen URLs will, muss beides mitziehen.
+
+Die `404.html` liefert Vercel bei statischen Projekten automatisch als
+Fehlerseite aus; dafür ist keine Konfiguration nötig.
+
 ## Vor dem Livegang
 
 Der Code ist fertig; offen sind fast nur noch Geschäftsentscheidungen.
