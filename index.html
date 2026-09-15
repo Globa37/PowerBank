@@ -201,6 +201,9 @@ header{
   border-bottom:1px solid transparent;transition:border-color .4s,background .4s;
 }
 header.stuck{border-bottom-color:var(--line);background:rgba(7,8,10,.9);}
+/* Sobald die Kaufleiste unten steht, fuehrt sie - der Kopf tritt zurueck. */
+header.has-bar .btn-buy{opacity:0;pointer-events:none;transform:translateY(-6px);}
+header .btn-buy{transition:opacity .35s var(--ease),transform .35s var(--ease);}
 header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:20px;}
 .brand{display:flex;align-items:center;gap:11px;font-family:'Inter Tight',sans-serif;font-weight:700;letter-spacing:.07em;font-size:1.02rem;}
 .brand span{
@@ -542,7 +545,7 @@ section{position:relative;z-index:2;}
    ========================================================================== */
 .buybar{
   position:fixed;left:0;right:0;bottom:0;z-index:70;
-  display:none;align-items:center;justify-content:space-between;gap:14px;
+  display:none;align-items:center;gap:14px;
   padding:12px 16px calc(12px + env(safe-area-inset-bottom));
   background:rgba(7,8,10,.93);backdrop-filter:blur(18px);
   border-top:1px solid var(--line);
@@ -551,7 +554,14 @@ section{position:relative;z-index:2;}
 .buybar.show{transform:translateY(0);}
 .buybar .bb-info{font-size:.82rem;color:var(--dim);line-height:1.3;}
 .buybar .bb-info b{display:block;color:var(--text);font-family:'Inter Tight',sans-serif;font-size:1.06rem;font-weight:700;}
-@media(max-width:700px){.buybar{display:flex;}}
+.buybar.show{display:flex;}
+/* Innen wie der Seiteninhalt begrenzen, sonst zerfaellt die Leiste auf
+   grossen Schirmen in zwei weit auseinanderliegende Haelften. */
+.bb-inner{
+  width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gut);
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+@media(max-width:700px){.bb-inner{padding-inline:0;}}
 
 /* ==========================================================================
    FUSS
@@ -670,7 +680,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);background:v
       <a href="#daten">Daten</a>
       <a href="#fragen">Fragen</a>
     </nav>
-    <a href="#kaufen" class="btn btn-buy btn-sm">Jetzt sichern</a>
+    <button type="button" class="btn btn-buy btn-sm" data-checkout data-quantity="1">Jetzt kaufen</button>
   </div>
 </header>
 
@@ -866,7 +876,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);background:v
       <p>Der Magnetring rastet von selbst mittig ein und hält auch in der
          Jackentasche. Abziehen geht rückstandslos — keine Klebepads, keine
          extra Halterung.</p>
-      <a href="#kaufen" class="btn btn-buy">Farbe wählen und bestellen</a>
+      <button type="button" class="btn btn-buy" data-checkout data-quantity="1">Jetzt kaufen — <span data-price>49,90&nbsp;€</span></button>
     </div>
   </div>
 </div>
@@ -990,18 +1000,20 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);background:v
     <div class="rv">
       <h2>Drei Farben.<br>Eine Entscheidung.</h2>
       <p>Heute bestellt, morgen hängt sie an deinem Handy.</p>
-      <a href="#kaufen" class="btn btn-buy">Jetzt sichern — <span data-price>49,90&nbsp;€</span></a>
+      <button type="button" class="btn btn-buy" data-checkout data-quantity="1">Jetzt kaufen — <span data-price>49,90&nbsp;€</span></button>
     </div>
   </div>
 </section>
 
 <!-- ============================ KAUFLEISTE (mobil) ============================ -->
 <div class="buybar" id="buybar">
-  <div class="bb-info">
-    <b data-price>49,90&nbsp;€</b>
-    <span id="bbColor">Titan Silber</span>
+  <div class="bb-inner">
+    <div class="bb-info">
+      <b data-price id="bbPrice">49,90&nbsp;€</b>
+      <span id="bbColor">Titan Silber</span>
+    </div>
+    <button type="button" class="btn btn-buy btn-sm" data-checkout data-quantity="1">Jetzt kaufen</button>
   </div>
-  <button type="button" class="btn btn-buy btn-sm" data-checkout data-quantity="1">Jetzt kaufen</button>
 </div>
 
 <!-- ============================ FUSS ============================ -->
@@ -1083,6 +1095,12 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);background:v
   var qtySum = document.getElementById('qtySum');
   var qtyBtns = [].slice.call(document.querySelectorAll('[data-qty]'));
   var buyBtns = [].slice.call(document.querySelectorAll('[data-checkout]'));
+  var bbPrice = document.getElementById('bbPrice');
+  var bbCount = document.createElement('span');
+  bbCount.hidden = true;
+  if (document.getElementById('bbColor')) {
+    document.getElementById('bbColor').appendChild(bbCount);
+  }
 
   function renderQty(){
     qtyVal.textContent = qty;
@@ -1098,6 +1116,14 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);background:v
       qtySum.innerHTML = qty + ' \u00d7 ' + fmt(cents) + ' = <b>' + fmt(cents * qty) + '</b>';
     } else {
       qtySum.hidden = true;
+    }
+
+    /* Die Leiste unten zeigt die Summe, nicht den Stueckpreis - sonst steht
+       dort eine andere Zahl als im Kaufblock. */
+    if (bbPrice && cents) {
+      bbPrice.textContent = fmt(cents * qty);
+      bbCount.hidden = qty < 2;
+      bbCount.textContent = ' · ' + qty + ' Stück';
     }
   }
 
@@ -1251,6 +1277,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);background:v
     if (buyBlock) {
       var past = buyBlock.getBoundingClientRect().bottom < 0;
       buybar.classList.toggle('show', past);
+      head.classList.toggle('has-bar', past);
     }
 
     var proof = document.getElementById('proofImg');
