@@ -335,22 +335,46 @@ h1 em{font-style:normal;color:var(--cta);}
   position:relative;width:100%;aspect-ratio:1;display:grid;place-items:center;
   max-width:600px;
 }
-/* Magnetringe: pulsieren nach aussen wie ein Magnetfeld. */
-.rings{position:absolute;inset:0;display:grid;place-items:center;}
-.rings i{
-  position:absolute;width:42%;aspect-ratio:1;border-radius:50%;
-  border:1.5px solid;border-color:var(--glow);opacity:0;
-  box-shadow:0 0 18px -2px var(--glow), inset 0 0 14px -6px var(--glow);
-  animation:pulse 5.2s cubic-bezier(.22,.8,.3,1) infinite;
+/* Ladeanzeige in Akku-Form unter dem Produkt. Vier Zellen fuellen sich
+   nacheinander und entladen wieder - dasselbe Bild wie die vier LED-Punkte
+   am Geraet. Sie steht unter der Powerbank statt dahinter, sonst verdeckt
+   das Produkt sie und es bleiben nur Striche am Rand.
+   Keine transition auf background-color: Chromium friert sonst den aus
+   var(--glow) aufgeloesten Wert ein, wie zuvor bei den Magnetringen. */
+.ladung{
+  position:absolute;left:50%;bottom:3%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:clamp(3px,.5vw,5px);
+  width:clamp(150px,38%,290px);pointer-events:none;
 }
-.rings i:nth-child(2){animation-delay:1.3s;}
-.rings i:nth-child(3){animation-delay:2.6s;}
-.rings i:nth-child(4){animation-delay:3.9s;}
-@keyframes pulse{
-  0%{transform:scale(.5);opacity:0;}
-  14%{opacity:.62;}
-  100%{transform:scale(2.05);opacity:0;}
+.ladung .huelle{
+  flex:1;display:flex;gap:clamp(4px,.8vw,8px);
+  padding:clamp(4px,.8vw,8px);
+  border:2px solid;border-color:var(--glow);
+  border-radius:clamp(6px,1.2vw,11px);
+  opacity:.8;
 }
+/* Grundzustand ist bewusst schon sichtbar: sieht die Anzeige auch ohne
+   laufende Animation nach einem Akku aus, faellt es nicht auf, wenn ein
+   Browser die Animation aussetzt oder der Nutzer weniger Bewegung wuenscht. */
+.ladung .huelle i{
+  flex:1;border-radius:3px;background:var(--glow);opacity:.3;
+  min-height:clamp(9px,1.7vw,16px);
+  animation:laden 5.2s ease-in-out infinite;
+}
+.ladung .huelle i:nth-child(2){animation-delay:.55s;}
+.ladung .huelle i:nth-child(3){animation-delay:1.1s;}
+.ladung .huelle i:nth-child(4){animation-delay:1.65s;}
+/* Der Pluspol macht die Form eindeutig als Akku lesbar. */
+.ladung .pol{
+  width:clamp(4px,.8vw,7px);height:44%;border-radius:0 3px 3px 0;
+  background:var(--glow);opacity:.8;
+}
+@keyframes laden{
+  0%,4%   {opacity:.3;}
+  12%,66% {opacity:1;}
+  76%,100%{opacity:.3;}
+}
+
 .halo{
   position:absolute;width:88%;aspect-ratio:1;border-radius:50%;
   background:radial-gradient(circle,var(--glow-soft) 0%,transparent 68%);
@@ -891,7 +915,10 @@ footer{
     <div class="stage-col">
       <div class="stage">
         <div class="halo"></div>
-        <div class="rings" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div class="ladung" aria-hidden="true">
+          <span class="huelle"><i></i><i></i><i></i><i></i></span>
+          <span class="pol"></span>
+        </div>
         <div class="shots">
           <img id="shot-silber" class="on"
                src="assets/img/01-silber-freigestellt-780.png"
