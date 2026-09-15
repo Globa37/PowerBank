@@ -96,8 +96,8 @@
   --cta-2:#FF8A50;
 
   /* Wird vom Farbwähler gesetzt und färbt den ganzen Hintergrund. */
-  --glow:#8FB4D8;
-  --glow-soft:rgba(143,180,216,.24);
+  --glow:#C6D4E2;
+  --glow-soft:rgba(198,212,226,.30);
 
   --maxw:1240px;
   --gut:clamp(20px,5vw,64px);
@@ -130,7 +130,7 @@ h1,h2,h3{font-family:'Inter Tight',sans-serif;letter-spacing:-.03em;margin:0;}
 .bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
 
 /* 1 — Aurora: drei grosse Farbwolken, die traege umeinander wandern. */
-.aurora{position:absolute;inset:-25%;filter:blur(110px);opacity:.40;}
+.aurora{position:absolute;inset:-25%;filter:blur(105px);opacity:.60;}
 .aurora i{
   position:absolute;display:block;border-radius:50%;
   background:radial-gradient(circle,var(--glow) 0%,transparent 70%);
@@ -140,8 +140,7 @@ h1,h2,h3{font-family:'Inter Tight',sans-serif;letter-spacing:-.03em;margin:0;}
 .aurora i:nth-child(1){width:52vw;height:52vw;left:52%;top:2%;animation:drift1 26s ease-in-out infinite;}
 .aurora i:nth-child(2){width:40vw;height:40vw;left:4%;top:38%;animation:drift2 34s ease-in-out infinite;opacity:.7;}
 .aurora i:nth-child(3){
-  width:34vw;height:34vw;left:28%;top:-8%;animation:drift3 30s ease-in-out infinite;opacity:.5;
-  background:radial-gradient(circle,var(--cta) 0%,transparent 70%);
+  width:34vw;height:34vw;left:28%;top:-8%;animation:drift3 30s ease-in-out infinite;opacity:.42;
 }
 @keyframes drift1{
   0%,100%{transform:translate3d(0,0,0) scale(1);}
@@ -917,19 +916,19 @@ footer{
 
       <div class="picker" role="group" aria-label="Farbe wählen">
         <button type="button" class="sw on" data-c="silber"
-                data-name="Titan Silber" data-glow="#8FB4D8"
+                data-name="Titan Silber" data-glow="#C6D4E2"
                 data-desc="Gebürstetes Aluminium mit polierter Fase" aria-pressed="true">
           <img src="assets/img/01-silber-freigestellt-520.webp" alt="" width="46" height="46" loading="lazy">
           <em>Titan Silber</em>
         </button>
         <button type="button" class="sw" data-c="orange"
-                data-name="Copper Orange" data-glow="#FF6A2B"
+                data-name="Copper Orange" data-glow="#FF7A3C"
                 data-desc="Kupferton mit warmem Schimmer" aria-pressed="false">
           <img src="assets/img/02-orange-freigestellt-520.webp" alt="" width="46" height="46" loading="lazy">
           <em>Copper Orange</em>
         </button>
         <button type="button" class="sw" data-c="blau"
-                data-name="Midnight Navy" data-glow="#4C7DE8"
+                data-name="Midnight Navy" data-glow="#3A5FE0"
                 data-desc="Tiefes Nachtblau, matt eloxiert" aria-pressed="false">
           <img src="assets/img/03-blau-freigestellt-520.webp" alt="" width="46" height="46" loading="lazy">
           <em>Midnight Navy</em>
@@ -1228,7 +1227,7 @@ footer{
     });
     var glow = sw.dataset.glow;
     root.style.setProperty('--glow', glow);
-    root.style.setProperty('--glow-soft', hexToRgba(glow, .24));
+    root.style.setProperty('--glow-soft', hexToRgba(glow, .30));
     cName.textContent = sw.dataset.name;
     cDesc.textContent = sw.dataset.desc;
     bbColor.textContent = sw.dataset.name;
