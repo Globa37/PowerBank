@@ -1,0 +1,1045 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>VOLTIQ MAG — Magnetische 5000 mAh Powerbank mit 20 W</title>
+<meta name="description" content="VOLTIQ MAG: 9,5 mm dünne Magnet-Powerbank mit 5000 mAh, 15 W kabellosem Laden und 20 W USB-C Power Delivery. Drei Farben, direkt bestellbar.">
+
+<!--
+  ===========================================================================
+  VOLTIQ MAG — Landingpage
+  ---------------------------------------------------------------------------
+  Aufbau: Die Seite ist ein Verkaufstrichter, keine Broschüre. Der Hero IST
+  der Konfigurator — Farbe wählen und kaufen passiert über der Falz, alles
+  darunter räumt nur noch Einwände aus.
+
+  BILDER: liegen lokal unter assets/img/, erzeugt aus assets/raw/
+  (python scripts/build-images.py).
+
+    01/02/03-*-freigestellt   → Produktbühne im Hero (Alphakanal!)
+    04-rueckseite-magnetring  → Magnetring-Beweisbild
+    08-nacht-lifestyle        → Beweisstrecke
+    10-lineup-3-farben        → Abschluss-CTA
+    05, 06, 07, 09            → derzeit ungenutzt, bleiben als Reserve liegen
+
+  FARBWECHSEL: Die gewählte Farbe setzt --glow auf dem <html>-Element. Daran
+  hängen Aurora, Magnetringe, Partikel und Akzentkanten. Der CTA bleibt
+  bewusst immer kupfern — ein Kaufbutton, der die Farbe wechselt, verliert
+  seine Signalwirkung.
+
+  TODO vor Launch (Geschäftsentscheidungen, hier nur Platzhalter):
+    - Preis (aktuell 49,90 €, steht in assets/checkout.js)
+    - Versandherkunft / Lieferzeit / Verfügbarkeit
+    - Keine durchgestrichenen "Statt"-Preise ohne echte 30-Tage-Historie (PAngV)
+  ===========================================================================
+-->
+
+<link rel="canonical" href="https://voltiq.de/">
+<meta name="theme-color" content="#07080A">
+<meta name="robots" content="index,follow,max-image-preview:large">
+
+<!-- TODO Domain: alle Vorkommen von https://voltiq.de durch die echte Domain
+     ersetzen - auch in sitemap.xml und robots.txt. Danach OG-Bild pruefen:
+     https://cards-dev.twitter.com/validator und developers.facebook.com/tools/debug -->
+
+<!-- Open Graph -->
+<meta property="og:type" content="product">
+<meta property="og:site_name" content="VOLTIQ">
+<meta property="og:locale" content="de_DE">
+<meta property="og:title" content="VOLTIQ MAG - Magnetische 5000 mAh Powerbank mit 20 W">
+<meta property="og:description" content="9,5 mm duenn, haftet magnetisch am iPhone, laedt kabellos mit 15 W und per USB-C mit 20 W Power Delivery.">
+<meta property="og:url" content="https://voltiq.de/">
+<meta property="og:image" content="https://voltiq.de/assets/img/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="VOLTIQ MAG Powerbank magnetisch an einem Smartphone">
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="VOLTIQ MAG - Magnetische 5000 mAh Powerbank mit 20 W">
+<meta name="twitter:description" content="9,5 mm duenn, haftet magnetisch am iPhone, laedt kabellos mit 15 W und per USB-C mit 20 W Power Delivery.">
+<meta name="twitter:image" content="https://voltiq.de/assets/img/og-image.jpg">
+
+<!-- Icons -->
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<!-- Schriften liegen lokal (scripts/fetch-fonts.py). Kein Google-Request,
+     damit keine Besucher-IP an Dritte geht. -->
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+
+<!-- Die Startfarbe der Bühne ist das erste, was sichtbar wird. -->
+<link rel="preload" as="image"
+      href="assets/img/01-silber-freigestellt-780.png"
+      imagesrcset="assets/img/01-silber-freigestellt-520.webp 520w, assets/img/01-silber-freigestellt-780.webp 780w, assets/img/01-silber-freigestellt-1040.webp 1040w"
+      imagesizes="(max-width:980px) 74vw, min(42vw, 560px)"
+      fetchpriority="high">
+
+<style>
+/* ==========================================================================
+   TOKENS
+   ========================================================================== */
+:root{
+  --bg:#07080A;
+  --bg-2:#0A0C10;
+  --surface:#111419;
+  --surface-2:#161A20;
+  --line:rgba(255,255,255,.08);
+  --line-2:rgba(255,255,255,.15);
+  --text:#F4F6F9;
+  --dim:#A3AAB6;
+  --mute:#6C737E;
+
+  /* Marke. Bleibt konstant, damit der Kaufbutton immer gleich aussieht. */
+  --cta:#FF6A2B;
+  --cta-2:#FF8A50;
+
+  /* Wird vom Farbwähler gesetzt und färbt den ganzen Hintergrund. */
+  --glow:#8FB4D8;
+  --glow-soft:rgba(143,180,216,.24);
+
+  --maxw:1240px;
+  --gut:clamp(20px,5vw,64px);
+  --r:18px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --fs-display:clamp(2.7rem,7.2vw,5.6rem);
+}
+
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:1rem;line-height:1.65;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block;}
+a{color:inherit;text-decoration:none;}
+h1,h2,h3{font-family:'Inter Tight',sans-serif;letter-spacing:-.025em;margin:0;}
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gut);}
+.mono{
+  font-family:'JetBrains Mono',ui-monospace,monospace;
+  font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
+}
+
+/* ==========================================================================
+   HINTERGRUND — vier Ebenen, alle fest hinter dem Inhalt
+   ========================================================================== */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+
+/* 1 — Aurora: drei grosse Farbwolken, die traege umeinander wandern. */
+.aurora{position:absolute;inset:-25%;filter:blur(90px);opacity:.55;}
+.aurora i{
+  position:absolute;display:block;border-radius:50%;
+  background:radial-gradient(circle,var(--glow) 0%,transparent 70%);
+  transition:background 1.2s var(--ease);
+  will-change:transform;
+}
+.aurora i:nth-child(1){width:52vw;height:52vw;left:52%;top:2%;animation:drift1 26s ease-in-out infinite;}
+.aurora i:nth-child(2){width:40vw;height:40vw;left:4%;top:38%;animation:drift2 34s ease-in-out infinite;opacity:.7;}
+.aurora i:nth-child(3){
+  width:34vw;height:34vw;left:28%;top:-8%;animation:drift3 30s ease-in-out infinite;opacity:.5;
+  background:radial-gradient(circle,var(--cta) 0%,transparent 70%);
+}
+@keyframes drift1{
+  0%,100%{transform:translate3d(0,0,0) scale(1);}
+  33%{transform:translate3d(-9%,7%,0) scale(1.12);}
+  66%{transform:translate3d(6%,-5%,0) scale(.94);}
+}
+@keyframes drift2{
+  0%,100%{transform:translate3d(0,0,0) scale(1);}
+  50%{transform:translate3d(12%,-9%,0) scale(1.18);}
+}
+@keyframes drift3{
+  0%,100%{transform:translate3d(0,0,0) scale(.9);}
+  40%{transform:translate3d(-7%,12%,0) scale(1.1);}
+  75%{transform:translate3d(9%,4%,0) scale(1);}
+}
+
+/* 2 — Raster, das langsam nach hinten zieht. Gibt dem Schwarz Tiefe. */
+.grid{
+  position:absolute;inset:-50% -50% 0 -50%;height:150%;
+  background-image:
+    linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);
+  background-size:62px 62px;
+  transform:perspective(560px) rotateX(64deg);
+  transform-origin:50% 0;
+  mask-image:linear-gradient(to bottom,#000 0%,transparent 62%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,transparent 62%);
+  animation:gridpan 22s linear infinite;
+  opacity:.75;
+}
+@keyframes gridpan{to{background-position:0 62px,62px 0;}}
+
+/* 3 — Partikel (Canvas), aufsteigende Ladungsfunken. */
+#motes{position:absolute;inset:0;width:100%;height:100%;opacity:.7;}
+
+/* 4 — Korn. Nimmt den Verläufen das Digitale. */
+.noise{
+  position:absolute;inset:0;opacity:.035;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Zeigerlicht */
+#cursor{
+  position:fixed;width:520px;height:520px;border-radius:50%;z-index:1;
+  pointer-events:none;opacity:0;transition:opacity .5s;
+  background:radial-gradient(circle,var(--glow-soft) 0%,transparent 62%);
+  transform:translate(-50%,-50%);will-change:transform;
+}
+@media(hover:hover) and (pointer:fine){#cursor{opacity:1;}}
+
+/* ==========================================================================
+   NAVIGATION
+   ========================================================================== */
+header{
+  position:sticky;top:0;z-index:60;
+  background:rgba(7,8,10,.72);backdrop-filter:blur(20px) saturate(150%);
+  border-bottom:1px solid transparent;transition:border-color .4s,background .4s;
+}
+header.stuck{border-bottom-color:var(--line);background:rgba(7,8,10,.9);}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:20px;}
+.brand{display:flex;align-items:center;gap:11px;font-family:'Inter Tight',sans-serif;font-weight:700;letter-spacing:.07em;font-size:1.02rem;}
+.brand span{
+  width:9px;height:9px;border-radius:50%;background:var(--cta);
+  box-shadow:0 0 0 0 rgba(255,106,43,.55);animation:ping 2.6s ease-out infinite;
+}
+@keyframes ping{
+  0%{box-shadow:0 0 0 0 rgba(255,106,43,.5);}
+  70%{box-shadow:0 0 0 13px rgba(255,106,43,0);}
+  100%{box-shadow:0 0 0 0 rgba(255,106,43,0);}
+}
+nav{display:flex;gap:30px;}
+nav a{font-size:.88rem;color:var(--dim);transition:color .25s;}
+nav a:hover{color:var(--text);}
+@media(max-width:860px){nav{display:none;}}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+.btn{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:16px 30px;border-radius:999px;border:1px solid transparent;
+  font-family:'Inter Tight',sans-serif;font-weight:600;font-size:1rem;
+  cursor:pointer;overflow:hidden;white-space:nowrap;
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease);
+}
+.btn-buy{
+  background:linear-gradient(135deg,var(--cta-2),var(--cta));color:#150800;
+  box-shadow:0 10px 34px -10px rgba(255,106,43,.75);
+}
+.btn-buy:hover{transform:translateY(-2px);box-shadow:0 16px 42px -10px rgba(255,106,43,.9);}
+/* Wanderndes Licht über dem Kaufbutton — zieht den Blick. */
+.btn-buy::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);
+  transform:translateX(-120%);animation:sheen 4.2s ease-in-out infinite;
+}
+@keyframes sheen{0%,62%{transform:translateX(-120%);}88%,100%{transform:translateX(120%);}}
+.btn-ghost{border-color:var(--line-2);color:var(--text);background:rgba(255,255,255,.03);}
+.btn-ghost:hover{background:rgba(255,255,255,.07);transform:translateY(-2px);}
+.btn-sm{padding:11px 22px;font-size:.9rem;}
+
+/* ==========================================================================
+   HERO = KONFIGURATOR
+   ========================================================================== */
+.hero{position:relative;z-index:2;padding-block:clamp(36px,6vw,64px) clamp(56px,8vw,96px);}
+.hero .wrap{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.02fr);
+  gap:clamp(28px,5vw,72px);align-items:center;
+}
+@media(max-width:980px){
+  .hero .wrap{grid-template-columns:1fr;gap:34px;}
+  .stage-col{order:-1;}
+}
+
+.eyebrow{color:var(--cta);margin:0 0 20px;display:flex;align-items:center;gap:10px;}
+.eyebrow b{color:var(--text);font-weight:500;}
+h1{font-size:var(--fs-display);font-weight:800;line-height:.96;}
+h1 em{font-style:normal;color:var(--cta);}
+.sub{color:var(--dim);font-size:clamp(1rem,1.35vw,1.14rem);margin:22px 0 0;max-width:30em;}
+
+/* Kurzdaten direkt unter der Überschrift statt eigener Sektion. */
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px;}
+.facts li{
+  list-style:none;padding:7px 14px;border-radius:999px;
+  border:1px solid var(--line);background:rgba(255,255,255,.028);
+  font-size:.82rem;color:var(--dim);
+}
+.facts b{color:var(--text);font-weight:600;}
+
+/* --- Kaufblock ----------------------------------------------------------- */
+.buy{
+  margin-top:32px;padding:24px;border-radius:var(--r);
+  border:1px solid var(--line);background:rgba(17,20,25,.62);
+  backdrop-filter:blur(12px);
+  position:relative;overflow:hidden;
+}
+/* Laufende Kante in der aktiven Produktfarbe. */
+.buy::before{
+  content:'';position:absolute;left:0;top:0;width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--glow),transparent);
+  animation:edge 3.6s linear infinite;
+}
+@keyframes edge{0%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
+
+.buy-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.chosen{font-family:'Inter Tight',sans-serif;font-weight:600;font-size:1.06rem;}
+.chosen small{display:block;color:var(--mute);font-weight:400;font-size:.8rem;margin-top:2px;}
+.price{text-align:right;}
+.price b{font-family:'Inter Tight',sans-serif;font-size:2rem;font-weight:700;letter-spacing:-.03em;display:block;line-height:1;}
+.price small{color:var(--mute);font-size:.76rem;}
+.buy .btn{width:100%;margin-top:20px;}
+
+.assure{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:16px;color:var(--mute);}
+.assure span{display:flex;align-items:center;gap:7px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;font-family:'JetBrains Mono',ui-monospace,monospace;}
+.assure i{color:#4ADE80;font-style:normal;}
+
+/* --- Produktbühne -------------------------------------------------------- */
+.stage-col{display:flex;flex-direction:column;align-items:center;gap:26px;}
+.stage{
+  position:relative;width:100%;aspect-ratio:1;display:grid;place-items:center;
+  max-width:560px;
+}
+/* Magnetringe: pulsieren nach aussen wie ein Magnetfeld. */
+.rings{position:absolute;inset:0;display:grid;place-items:center;}
+.rings i{
+  position:absolute;width:42%;aspect-ratio:1;border-radius:50%;
+  border:1px solid var(--glow);opacity:0;
+  animation:pulse 4.4s cubic-bezier(.22,.8,.3,1) infinite;
+  transition:border-color 1.2s var(--ease);
+}
+.rings i:nth-child(2){animation-delay:1.1s;}
+.rings i:nth-child(3){animation-delay:2.2s;}
+.rings i:nth-child(4){animation-delay:3.3s;}
+@keyframes pulse{
+  0%{transform:scale(.5);opacity:0;}
+  12%{opacity:.5;}
+  100%{transform:scale(2.05);opacity:0;}
+}
+.halo{
+  position:absolute;width:76%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,var(--glow-soft) 0%,transparent 66%);
+  filter:blur(26px);transition:background 1.2s var(--ease);
+}
+.shots{position:relative;width:100%;height:100%;display:grid;place-items:center;}
+/* height:auto ist hier Pflicht: die width/height-Attribute am <img> wirken
+   als Presentational Hint und wuerden das Bild sonst auf 2048 px hoch ziehen. */
+.shots img{
+  grid-area:1/1;width:82%;height:auto;opacity:0;transform:scale(.9) rotate(-5deg);
+  /* Das abgehende Bild geht zuerst weg, das neue kommt leicht versetzt nach.
+     Ohne den Versatz liegen beide kurz bei 50 % und man sieht ein Doppelbild. */
+  transition:opacity .42s var(--ease),transform .9s var(--ease);
+  filter:drop-shadow(0 34px 46px rgba(0,0,0,.6));
+}
+.shots img.on{
+  opacity:1;transform:scale(1) rotate(0);
+  transition:opacity .55s var(--ease) .16s,transform .9s var(--ease);
+  animation:float 7s ease-in-out infinite 1s;
+}
+@keyframes float{
+  0%,100%{translate:0 0;rotate:0deg;}
+  50%{translate:0 -16px;rotate:-1.1deg;}
+}
+
+/* --- Farbauswahl: die Akkus selbst sind die Knöpfe ----------------------- */
+.picker{display:flex;gap:12px;width:100%;max-width:560px;}
+.sw{
+  flex:1;position:relative;cursor:pointer;
+  border:1px solid var(--line);border-radius:14px;
+  background:rgba(255,255,255,.028);padding:12px 10px 13px;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  transition:border-color .35s,background .35s,transform .35s var(--ease);
+  font:inherit;color:inherit;
+}
+.sw:hover{transform:translateY(-3px);background:rgba(255,255,255,.06);}
+.sw img{width:46px;height:46px;object-fit:contain;transition:transform .4s var(--ease);}
+.sw:hover img{transform:scale(1.1);}
+.sw em{font-style:normal;font-size:.76rem;color:var(--dim);letter-spacing:.01em;}
+.sw.on{border-color:var(--glow);background:rgba(255,255,255,.075);}
+.sw.on em{color:var(--text);}
+.sw.on::after{
+  content:'';position:absolute;top:9px;right:9px;width:7px;height:7px;border-radius:50%;
+  background:var(--glow);box-shadow:0 0 10px var(--glow);
+}
+.sw:focus-visible{outline:2px solid var(--cta);outline-offset:3px;}
+
+/* ==========================================================================
+   BEWEIS — drei Gründe, eng gesetzt
+   ========================================================================== */
+section{position:relative;z-index:2;}
+.reasons{padding-block:clamp(48px,7vw,90px);}
+.reasons .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,26px);}
+@media(max-width:820px){.reasons .wrap{grid-template-columns:1fr;}}
+.card{
+  padding:28px 26px 30px;border-radius:var(--r);
+  border:1px solid var(--line);background:linear-gradient(170deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+  position:relative;overflow:hidden;transition:border-color .4s,transform .4s var(--ease);
+}
+.card:hover{border-color:var(--line-2);transform:translateY(-4px);}
+.card::after{
+  content:'';position:absolute;inset:0;opacity:0;transition:opacity .5s;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.07),transparent 42%);
+}
+.card:hover::after{opacity:1;}
+.num{font-family:'Inter Tight',sans-serif;font-size:2.7rem;font-weight:800;letter-spacing:-.04em;line-height:1;}
+.num u{text-decoration:none;font-size:1.05rem;color:var(--mute);margin-left:5px;font-weight:500;}
+.card h3{font-size:1.05rem;font-weight:600;margin:16px 0 8px;}
+.card p{color:var(--dim);font-size:.93rem;margin:0;}
+
+/* ==========================================================================
+   BEWEISBILD
+   ========================================================================== */
+.proof{position:relative;min-height:clamp(420px,62vh,620px);display:grid;align-items:center;overflow:hidden;}
+.proof img{
+  position:absolute;inset:0;width:100%;height:112%;object-fit:cover;top:-6%;
+  will-change:transform;
+}
+.proof::before{
+  content:'';position:absolute;inset:0;z-index:1;
+  background:linear-gradient(90deg,rgba(7,8,10,.94) 0%,rgba(7,8,10,.72) 46%,rgba(7,8,10,.25) 100%);
+}
+.proof .wrap{position:relative;z-index:2;}
+.proof h2{font-size:clamp(1.8rem,4vw,3rem);font-weight:700;line-height:1.05;max-width:16em;}
+.proof p{color:var(--dim);max-width:34em;margin:20px 0 30px;}
+
+/* ==========================================================================
+   DATEN — ein kompakter Streifen statt einer Tabellenseite
+   ========================================================================== */
+.specs{padding-block:clamp(48px,7vw,84px);}
+.spec-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  background:rgba(17,20,25,.5);backdrop-filter:blur(10px);
+}
+@media(max-width:860px){.spec-grid{grid-template-columns:repeat(2,1fr);}}
+.spec{padding:22px 22px 24px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);}
+.spec:nth-child(4n){border-right:0;}
+.spec:nth-last-child(-n+4){border-bottom:0;}
+@media(max-width:860px){
+  .spec:nth-child(4n){border-right:1px solid var(--line);}
+  .spec:nth-child(2n){border-right:0;}
+  .spec:nth-last-child(-n+4){border-bottom:1px solid var(--line);}
+  .spec:nth-last-child(-n+2){border-bottom:0;}
+}
+.spec dt{color:var(--mute);font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;}
+.spec dd{margin:9px 0 0;font-family:'Inter Tight',sans-serif;font-weight:600;font-size:1.06rem;}
+
+/* ==========================================================================
+   EINWÄNDE
+   ========================================================================== */
+.faq{padding-bottom:clamp(48px,7vw,84px);}
+.faq h2{font-size:clamp(1.5rem,3vw,2.1rem);font-weight:700;margin-bottom:26px;}
+.q{border-top:1px solid var(--line);}
+.q:last-child{border-bottom:1px solid var(--line);}
+.q summary{
+  cursor:pointer;list-style:none;padding:20px 40px 20px 0;position:relative;
+  font-family:'Inter Tight',sans-serif;font-weight:600;font-size:1.02rem;
+  transition:color .25s;
+}
+.q summary::-webkit-details-marker{display:none;}
+.q summary:hover{color:var(--cta);}
+.q summary::after{
+  content:'';position:absolute;right:6px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--mute);border-bottom:2px solid var(--mute);
+  transform:translateY(-70%) rotate(45deg);transition:transform .35s var(--ease);
+}
+.q[open] summary::after{transform:translateY(-30%) rotate(225deg);}
+.q p{color:var(--dim);margin:0 0 22px;max-width:60em;font-size:.95rem;}
+
+/* ==========================================================================
+   ABSCHLUSS
+   ========================================================================== */
+.final{position:relative;text-align:center;padding-block:clamp(70px,10vw,120px);overflow:hidden;}
+.final img{
+  position:absolute;bottom:-6%;left:50%;transform:translateX(-50%);
+  width:min(1100px,130%);height:auto;max-width:none;z-index:0;opacity:.42;
+  mask-image:linear-gradient(to top,transparent 4%,#000 60%);
+  -webkit-mask-image:linear-gradient(to top,transparent 4%,#000 60%);
+}
+.final .wrap{position:relative;z-index:2;}
+.final h2{font-size:clamp(1.9rem,4.6vw,3.3rem);font-weight:800;line-height:1.02;}
+.final p{color:var(--dim);margin:18px auto 30px;max-width:30em;}
+
+/* ==========================================================================
+   KAUFLEISTE (mobil) — der Kauf bleibt immer einen Daumen entfernt
+   ========================================================================== */
+.buybar{
+  position:fixed;left:0;right:0;bottom:0;z-index:70;
+  display:none;align-items:center;justify-content:space-between;gap:14px;
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+  background:rgba(7,8,10,.93);backdrop-filter:blur(18px);
+  border-top:1px solid var(--line);
+  transform:translateY(110%);transition:transform .45s var(--ease);
+}
+.buybar.show{transform:translateY(0);}
+.buybar .bb-info{font-size:.82rem;color:var(--dim);line-height:1.3;}
+.buybar .bb-info b{display:block;color:var(--text);font-family:'Inter Tight',sans-serif;font-size:1.06rem;font-weight:700;}
+@media(max-width:700px){.buybar{display:flex;}}
+
+/* ==========================================================================
+   FUSS
+   ========================================================================== */
+footer{position:relative;z-index:2;border-top:1px solid var(--line);background:var(--bg-2);padding-block:40px 34px;}
+.foot{display:flex;flex-wrap:wrap;gap:26px 40px;justify-content:space-between;align-items:flex-start;}
+.foot nav{display:flex;flex-wrap:wrap;gap:10px 22px;max-width:640px;}
+.foot nav a{color:var(--mute);font-size:.85rem;transition:color .25s;}
+.foot nav a:hover{color:var(--text);}
+.foot-base{margin-top:28px;padding-top:22px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px 20px;justify-content:space-between;color:var(--mute);font-size:.78rem;}
+
+/* ==========================================================================
+   SCROLL-REVEAL + BEWEGUNGSARMUT
+   ========================================================================== */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .85s var(--ease),transform .85s var(--ease);}
+.rv.in{opacity:1;transform:none;}
+.rv[data-d="1"]{transition-delay:.09s;}
+.rv[data-d="2"]{transition-delay:.18s;}
+.rv[data-d="3"]{transition-delay:.27s;}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important;}
+  .rv{opacity:1;transform:none;}
+  html{scroll-behavior:auto;}
+}
+</style>
+
+<!-- Ohne JavaScript feuert der IntersectionObserver nie und alles mit .rv
+     bliebe unsichtbar. Dann lieber ohne Einblendung als gar nicht. -->
+<noscript><style>.rv{opacity:1;transform:none;}</style></noscript>
+
+<!-- ===================================================================
+     STRUKTURIERTE DATEN
+     TODO vor Livegang: price, priceValidUntil, sku, gtin13, brand und
+     die Shop-Daten auf die echten Werte setzen. Falsche Angaben hier
+     fuehren zu Google-Merchant-Ablehnungen.
+     Pruefen mit: https://search.google.com/test/rich-results
+     =================================================================== -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://voltiq.de/#organization",
+      "name": "VOLTIQ",
+      "url": "https://voltiq.de/",
+      "logo": "https://voltiq.de/assets/icon-512.png"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://voltiq.de/#website",
+      "url": "https://voltiq.de/",
+      "name": "VOLTIQ",
+      "inLanguage": "de-DE",
+      "publisher": { "@id": "https://voltiq.de/#organization" }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://voltiq.de/#product",
+      "name": "VOLTIQ MAG",
+      "description": "Magnetische Powerbank mit 5000 mAh, 15 W kabellosem Laden und 20 W USB-C Power Delivery. 9,5 mm duenn, 115 g, Aluminium-Gehaeuse.",
+      "image": [
+        "https://voltiq.de/assets/img/10-lineup-3-farben-1440.jpg",
+        "https://voltiq.de/assets/img/08-nacht-lifestyle-900.jpg",
+        "https://voltiq.de/assets/img/og-image.jpg"
+      ],
+      "brand": { "@type": "Brand", "name": "VOLTIQ" },
+      "category": "Powerbank",
+      "color": ["Silber", "Orange", "Navy"],
+      "weight": { "@type": "QuantitativeValue", "value": 115, "unitCode": "GRM" },
+      "width":  { "@type": "QuantitativeValue", "value": 66, "unitCode": "MMT" },
+      "height": { "@type": "QuantitativeValue", "value": 96, "unitCode": "MMT" },
+      "depth":  { "@type": "QuantitativeValue", "value": 9.5, "unitCode": "MMT" },
+      "additionalProperty": [
+        { "@type": "PropertyValue", "name": "Kapazitaet", "value": "5000 mAh" },
+        { "@type": "PropertyValue", "name": "Kabelgebunden", "value": "20 W USB-C Power Delivery" },
+        { "@type": "PropertyValue", "name": "Kabellos", "value": "5 / 7,5 / 10 / 15 W" },
+        { "@type": "PropertyValue", "name": "Zelltyp", "value": "Li-Polymer" }
+      ],
+      "offers": {
+        "@type": "Offer",
+        "url": "https://voltiq.de/#kaufen",
+        "priceCurrency": "EUR",
+        "price": "49.90",
+        "priceValidUntil": "2027-12-31",
+        "availability": "https://schema.org/InStock",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": { "@id": "https://voltiq.de/#organization" }
+      }
+    }
+  ]
+}
+</script>
+
+<!-- ============================ HINTERGRUND ============================ -->
+<div class="bg" aria-hidden="true">
+  <div class="aurora"><i></i><i></i><i></i></div>
+  <div class="grid"></div>
+  <canvas id="motes"></canvas>
+  <div class="noise"></div>
+</div>
+<div id="cursor" aria-hidden="true"></div>
+
+<!-- ============================ NAVIGATION ============================ -->
+<header id="head">
+  <div class="wrap">
+    <a class="brand" href="#top"><span></span>VOLTIQ</a>
+    <nav>
+      <a href="#gruende">Warum</a>
+      <a href="#daten">Daten</a>
+      <a href="#fragen">Fragen</a>
+    </nav>
+    <a href="#kaufen" class="btn btn-buy btn-sm">Jetzt sichern</a>
+  </div>
+</header>
+
+<!-- ============================ HERO / KONFIGURATOR ============================ -->
+<section class="hero" id="top">
+  <div class="wrap">
+
+    <div>
+      <p class="eyebrow mono rv in">Sofort lieferbar <b>·</b> 3 Farben</p>
+      <h1 class="rv in" data-d="1">Akku leer?<br><em>Nie wieder.</em></h1>
+      <p class="sub rv in" data-d="2">
+        Die VOLTIQ MAG haftet magnetisch hinten am iPhone und lädt sofort los.
+        Kein Kabel, keine Hülle, keine Suche nach der Steckdose.
+      </p>
+
+      <ul class="facts rv in" data-d="2">
+        <li><b>5000</b> mAh</li>
+        <li><b>20 W</b> USB-C</li>
+        <li><b>15 W</b> kabellos</li>
+        <li><b>9,5 mm</b> dünn</li>
+        <li><b>115 g</b></li>
+      </ul>
+
+      <!-- Kaufblock: Auswahl, Preis und Button auf einen Blick. -->
+      <div class="buy rv in" data-d="3" id="kaufen">
+        <div class="buy-head">
+          <div class="chosen">
+            VOLTIQ MAG <span id="cName">Titan Silber</span>
+            <small id="cDesc">Gebürstetes Aluminium mit polierter Fase</small>
+          </div>
+          <div class="price">
+            <b data-price>49,90&nbsp;€</b>
+            <small>inkl. MwSt.<!-- TODO: nur setzen, wenn Versand wirklich frei ist --> · versandkostenfrei</small>
+          </div>
+        </div>
+        <button type="button" class="btn btn-buy" data-checkout>In den Warenkorb</button>
+        <div class="assure">
+          <!-- TODO: Versandherkunft und Verfügbarkeit erst behaupten,
+               wenn die Logistik steht. Siehe versand.html -->
+          <span><i>✓</i>Versand aus Deutschland</span>
+          <span><i>✓</i>14 Tage Widerruf</span>
+          <span><i>✓</i>24 Monate Gewährleistung</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Produktbühne: freigestellte Akkus, direkt anwählbar. -->
+    <div class="stage-col">
+      <div class="stage">
+        <div class="halo"></div>
+        <div class="rings" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div class="shots">
+          <img id="shot-silber" class="on"
+               src="assets/img/01-silber-freigestellt-780.png"
+               srcset="assets/img/01-silber-freigestellt-520.webp 520w, assets/img/01-silber-freigestellt-780.webp 780w, assets/img/01-silber-freigestellt-1040.webp 1040w"
+               sizes="(max-width:980px) 74vw, min(42vw, 560px)"
+               width="2048" height="2048" fetchpriority="high" decoding="async"
+               alt="VOLTIQ MAG Powerbank in Titan Silber">
+          <img id="shot-orange"
+               src="assets/img/02-orange-freigestellt-780.png"
+               srcset="assets/img/02-orange-freigestellt-520.webp 520w, assets/img/02-orange-freigestellt-780.webp 780w, assets/img/02-orange-freigestellt-1040.webp 1040w"
+               sizes="(max-width:980px) 74vw, min(42vw, 560px)"
+               width="2048" height="2048" loading="lazy" decoding="async"
+               alt="VOLTIQ MAG Powerbank in Copper Orange">
+          <img id="shot-blau"
+               src="assets/img/03-blau-freigestellt-780.png"
+               srcset="assets/img/03-blau-freigestellt-520.webp 520w, assets/img/03-blau-freigestellt-780.webp 780w, assets/img/03-blau-freigestellt-1040.webp 1040w"
+               sizes="(max-width:980px) 74vw, min(42vw, 560px)"
+               width="2048" height="2048" loading="lazy" decoding="async"
+               alt="VOLTIQ MAG Powerbank in Midnight Navy">
+        </div>
+      </div>
+
+      <div class="picker" role="group" aria-label="Farbe wählen">
+        <button type="button" class="sw on" data-c="silber"
+                data-name="Titan Silber" data-glow="#8FB4D8"
+                data-desc="Gebürstetes Aluminium mit polierter Fase" aria-pressed="true">
+          <img src="assets/img/01-silber-freigestellt-520.webp" alt="" width="46" height="46" loading="lazy">
+          <em>Titan Silber</em>
+        </button>
+        <button type="button" class="sw" data-c="orange"
+                data-name="Copper Orange" data-glow="#FF6A2B"
+                data-desc="Kupferton mit warmem Schimmer" aria-pressed="false">
+          <img src="assets/img/02-orange-freigestellt-520.webp" alt="" width="46" height="46" loading="lazy">
+          <em>Copper Orange</em>
+        </button>
+        <button type="button" class="sw" data-c="blau"
+                data-name="Midnight Navy" data-glow="#4C7DE8"
+                data-desc="Tiefes Nachtblau, matt eloxiert" aria-pressed="false">
+          <img src="assets/img/03-blau-freigestellt-520.webp" alt="" width="46" height="46" loading="lazy">
+          <em>Midnight Navy</em>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================ DREI GRÜNDE ============================ -->
+<section class="reasons" id="gruende">
+  <div class="wrap">
+    <div class="card rv">
+      <div class="num"><span data-count="5000">0</span><u>mAh</u></div>
+      <h3>Eine volle Ladung, nicht nur ein Schluck</h3>
+      <p>Bringt ein iPhone von 0 auf rund 90 %. Reicht für den Heimweg, den Flug
+         oder den Abend, an dem du das Ladegerät vergessen hast.</p>
+    </div>
+    <div class="card rv" data-d="1">
+      <div class="num"><span data-count="20">0</span><u>Watt</u></div>
+      <h3>In 30 Minuten halb voll</h3>
+      <p>USB-C Power Delivery mit 20 W, wenn es schnell gehen muss. Derselbe Port
+         lädt die Powerbank auch wieder auf.</p>
+    </div>
+    <div class="card rv" data-d="2">
+      <div class="num"><span data-count="9.5" data-dec="1">0</span><u>mm</u></div>
+      <h3>Verschwindet in der Hosentasche</h3>
+      <p>115 Gramm, dünner als ein Autoschlüssel. Du merkst erst, dass sie dabei
+         ist, wenn du sie brauchst.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ BEWEISBILD ============================ -->
+<div class="proof">
+  <img id="proofImg"
+       src="assets/img/08-nacht-lifestyle-900.jpg"
+       srcset="assets/img/08-nacht-lifestyle-640.webp 640w, assets/img/08-nacht-lifestyle-900.webp 900w, assets/img/08-nacht-lifestyle-1280.webp 1280w"
+       sizes="100vw"
+       width="1792" height="2240" loading="lazy" decoding="async"
+       alt="VOLTIQ MAG magnetisch am Smartphone bei Nacht in der Stadt">
+  <div class="wrap">
+    <div class="rv">
+      <p class="eyebrow mono">Draufsetzen, fertig</p>
+      <h2>Kein Kabel. Kein Suchen. Kein Akkustress.</h2>
+      <p>Der Magnetring rastet von selbst mittig ein und hält auch in der
+         Jackentasche. Abziehen geht rückstandslos — keine Klebepads, keine
+         extra Halterung.</p>
+      <a href="#kaufen" class="btn btn-buy">Farbe wählen und bestellen</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ DATEN ============================ -->
+<section class="specs" id="daten">
+  <div class="wrap">
+    <dl class="spec-grid rv">
+      <div class="spec"><dt>Kapazität</dt><dd>5000 mAh</dd></div>
+      <div class="spec"><dt>Kabelgebunden</dt><dd>20 W USB-C PD</dd></div>
+      <div class="spec"><dt>Kabellos</dt><dd>bis 15 W</dd></div>
+      <div class="spec"><dt>Maße</dt><dd>96 × 66 × 9,5 mm</dd></div>
+      <div class="spec"><dt>Gewicht</dt><dd>115 g</dd></div>
+      <div class="spec"><dt>Gehäuse</dt><dd>Aluminium + ABS</dd></div>
+      <div class="spec"><dt>Zelle</dt><dd>Li-Polymer</dd></div>
+      <div class="spec"><dt>Energie</dt><dd>18,5 Wh</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ============================ EINWÄNDE ============================ -->
+<section class="faq" id="fragen">
+  <div class="wrap">
+    <h2 class="rv">Bevor du bestellst</h2>
+
+    <details class="q rv">
+      <summary>Passt die auf mein Handy?</summary>
+      <p>Auf jedes iPhone ab der 12er-Reihe hält sie direkt magnetisch. Bei
+         Android-Geräten und bei dicken Hüllen braucht es einen aufgeklebten
+         Magnetring — laden über USB-C funktioniert aber immer, unabhängig vom
+         Modell.</p>
+    </details>
+
+    <details class="q rv">
+      <summary>Darf ich sie mit ins Flugzeug nehmen?</summary>
+      <p>Ja, im Handgepäck. Mit rund 18,5 Wh liegt sie weit unter der
+         100-Wh-Grenze und braucht keine Sondergenehmigung. Ins aufgegebene
+         Gepäck darf sie nicht — das gilt für alle Powerbanks.</p>
+    </details>
+
+    <details class="q rv">
+      <summary>Wie schnell ist sie da?</summary>
+      <!-- TODO: echte Lieferzeit eintragen, sobald der Versand steht.
+           Unbestimmte Angaben sind nach Art. 246a EGBGB angreifbar. -->
+      <p>Bestellungen gehen werktags am selben Tag raus. Die Details zu
+         Versandkosten und Laufzeit stehen unter
+         <a href="versand.html" style="color:var(--cta)">Versand &amp; Lieferung</a>.</p>
+    </details>
+
+    <details class="q rv">
+      <summary>Und wenn sie mir nicht gefällt?</summary>
+      <p>14 Tage Widerrufsrecht, ohne Begründung. Die Ware geht zurück, das Geld
+         kommt zurück — Ablauf und Formular stehen in der
+         <a href="widerruf.html" style="color:var(--cta)">Widerrufsbelehrung</a>.
+         Dazu 24 Monate gesetzliche Gewährleistung.</p>
+    </details>
+  </div>
+</section>
+
+<!-- ============================ ABSCHLUSS ============================ -->
+<section class="final">
+  <img src="assets/img/10-lineup-3-farben-1440.jpg"
+       srcset="assets/img/10-lineup-3-farben-960.webp 960w, assets/img/10-lineup-3-farben-1440.webp 1440w, assets/img/10-lineup-3-farben-1920.webp 1920w"
+       sizes="min(1100px, 130vw)"
+       width="2688" height="1520" loading="lazy" decoding="async"
+       alt="VOLTIQ MAG in Silber, Orange und Navy nebeneinander">
+  <div class="wrap">
+    <div class="rv">
+      <h2>Drei Farben.<br>Eine Entscheidung.</h2>
+      <p>Heute bestellt, morgen hängt sie an deinem Handy.</p>
+      <a href="#kaufen" class="btn btn-buy">Jetzt sichern — <span data-price>49,90&nbsp;€</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ KAUFLEISTE (mobil) ============================ -->
+<div class="buybar" id="buybar">
+  <div class="bb-info">
+    <b data-price>49,90&nbsp;€</b>
+    <span id="bbColor">Titan Silber</span>
+  </div>
+  <button type="button" class="btn btn-buy btn-sm" data-checkout>In den Warenkorb</button>
+</div>
+
+<!-- ============================ FUSS ============================ -->
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <a class="brand" href="#top"><span></span>VOLTIQ</a>
+      <nav>
+        <a href="versand.html">Versand &amp; Lieferung</a>
+        <a href="rueckgabe.html">Rückgabe</a>
+        <a href="garantie.html">Gewährleistung</a>
+        <a href="batterien.html">Batterierücknahme</a>
+        <a href="kontakt.html">Kontakt</a>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="agb.html">AGB</a>
+        <a href="widerruf.html">Widerrufsbelehrung</a>
+      </nav>
+    </div>
+    <div class="foot-base">
+      <span>© 2026 VOLTIQ. Alle Rechte vorbehalten.</span>
+      <!-- TODO: nur stehen lassen, wenn die Entwicklung wirklich in DE stattfindet. -->
+      <span>Entwickelt in Deutschland</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/checkout.js" defer></script>
+<script>
+(function(){
+  'use strict';
+  var root = document.documentElement;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ------------------------------------------------------------------
+     Farbwahl. Setzt Bild, Texte und --glow; daran haengt der gesamte
+     Hintergrund. checkout.js liest spaeter .sw.on aus.
+     ------------------------------------------------------------------ */
+  var swatches = [].slice.call(document.querySelectorAll('.sw'));
+  var cName = document.getElementById('cName');
+  var cDesc = document.getElementById('cDesc');
+  var bbColor = document.getElementById('bbColor');
+
+  function hexToRgba(hex, a){
+    var n = parseInt(hex.slice(1), 16);
+    return 'rgba(' + (n >> 16 & 255) + ',' + (n >> 8 & 255) + ',' + (n & 255) + ',' + a + ')';
+  }
+
+  function pick(sw){
+    swatches.forEach(function(s){
+      var on = s === sw;
+      s.classList.toggle('on', on);
+      s.setAttribute('aria-pressed', on ? 'true' : 'false');
+      var shot = document.getElementById('shot-' + s.dataset.c);
+      if (shot) shot.classList.toggle('on', on);
+    });
+    var glow = sw.dataset.glow;
+    root.style.setProperty('--glow', glow);
+    root.style.setProperty('--glow-soft', hexToRgba(glow, .24));
+    cName.textContent = sw.dataset.name;
+    cDesc.textContent = sw.dataset.desc;
+    bbColor.textContent = sw.dataset.name;
+    moteColor = glow;
+  }
+
+  swatches.forEach(function(sw){
+    sw.addEventListener('click', function(){ pick(sw); });
+  });
+  pick(document.querySelector('.sw.on'));
+
+  /* ------------------------------------------------------------------
+     Partikel: aufsteigende Ladungsfunken in der aktiven Produktfarbe.
+     Bewusst wenige und langsam - der Hintergrund soll tragen, nicht
+     ablenken, und auf Mobilgeraeten nichts kosten.
+     ------------------------------------------------------------------ */
+  var moteColor = '#8FB4D8';
+  var canvas = document.getElementById('motes');
+
+  if (canvas && !reduced) {
+    var ctx = canvas.getContext('2d');
+    var motes = [];
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = 0, h = 0;
+
+    function size(){
+      w = canvas.clientWidth;
+      h = canvas.clientHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function seed(){
+      var count = w < 700 ? 22 : 46;
+      motes = [];
+      for (var i = 0; i < count; i++) {
+        motes.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 1.7 + .5,
+          v: Math.random() * .28 + .07,
+          drift: (Math.random() - .5) * .16,
+          a: Math.random() * .5 + .12,
+          p: Math.random() * Math.PI * 2
+        });
+      }
+    }
+
+    function frame(){
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = moteColor;
+      for (var i = 0; i < motes.length; i++) {
+        var m = motes[i];
+        m.y -= m.v;
+        m.p += .012;
+        m.x += m.drift + Math.sin(m.p) * .22;
+        if (m.y < -12) { m.y = h + 12; m.x = Math.random() * w; }
+        if (m.x < -12) m.x = w + 12;
+        if (m.x > w + 12) m.x = -12;
+        ctx.globalAlpha = m.a * (.55 + Math.sin(m.p) * .45);
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, m.r, 0, 6.2832);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(frame);
+    }
+
+    size(); seed(); frame();
+    var rt;
+    window.addEventListener('resize', function(){
+      clearTimeout(rt);
+      rt = setTimeout(function(){ size(); seed(); }, 180);
+    });
+  }
+
+  /* ------------------------------------------------------------------
+     Zeigerlicht und Karten-Hervorhebung
+     ------------------------------------------------------------------ */
+  var cursor = document.getElementById('cursor');
+  if (!reduced && window.matchMedia('(hover: hover)').matches) {
+    var cx = 0, cy = 0, tx = 0, ty = 0;
+    document.addEventListener('mousemove', function(e){
+      tx = e.clientX; ty = e.clientY;
+      var card = e.target.closest && e.target.closest('.card');
+      if (card) {
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      }
+    });
+    (function loop(){
+      cx += (tx - cx) * .1;
+      cy += (ty - cy) * .1;
+      cursor.style.transform = 'translate(' + cx + 'px,' + cy + 'px) translate(-50%,-50%)';
+      requestAnimationFrame(loop);
+    })();
+  }
+
+  /* ------------------------------------------------------------------
+     Scroll: Reveal, Zahlen, Kopfzeile, Kaufleiste, Parallax
+     ------------------------------------------------------------------ */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (!en.isIntersecting) return;
+      en.target.classList.add('in');
+      io.unobserve(en.target);
+      var counters = en.target.querySelectorAll('[data-count]');
+      for (var i = 0; i < counters.length; i++) count(counters[i]);
+    });
+  }, { threshold: .18, rootMargin: '0px 0px -8%' });
+
+  document.querySelectorAll('.rv').forEach(function(el){
+    if (!el.classList.contains('in')) io.observe(el);
+  });
+
+  function count(el){
+    var target = parseFloat(el.dataset.count);
+    var dec = parseInt(el.dataset.dec || '0', 10);
+    if (reduced) { el.textContent = target.toLocaleString('de-DE', {minimumFractionDigits: dec}); return; }
+    var start = performance.now(), dur = 1300;
+    (function step(now){
+      var p = Math.min((now - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = (target * eased).toLocaleString('de-DE', {
+        minimumFractionDigits: dec, maximumFractionDigits: dec
+      });
+      if (p < 1) requestAnimationFrame(step);
+    })(start);
+  }
+
+  var head = document.getElementById('head');
+  var buybar = document.getElementById('buybar');
+  var buyBlock = document.getElementById('kaufen');
+
+  function onScroll(){
+    var y = window.scrollY;
+    head.classList.toggle('stuck', y > 20);
+
+    /* Kaufleiste erst zeigen, wenn der Kaufblock oben durch ist. */
+    if (buyBlock) {
+      var past = buyBlock.getBoundingClientRect().bottom < 0;
+      buybar.classList.toggle('show', past);
+    }
+
+    var proof = document.getElementById('proofImg');
+    if (proof) {
+      var r = proof.parentElement.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < window.innerHeight) {
+        var off = (r.top / window.innerHeight) * 42;
+        proof.style.transform = 'translate3d(0,' + off.toFixed(1) + 'px,0)';
+      }
+    }
+  }
+
+  var ticking = false;
+  window.addEventListener('scroll', function(){
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){ onScroll(); ticking = false; });
+  }, { passive: true });
+  onScroll();
+
+  /* Immer nur eine Frage offen — hält die Seite kurz. */
+  var qs = [].slice.call(document.querySelectorAll('.q'));
+  qs.forEach(function(q){
+    q.addEventListener('toggle', function(){
+      if (!q.open) return;
+      qs.forEach(function(o){ if (o !== q) o.open = false; });
+    });
+  });
+})();
+</script>
+
+</body></html>
