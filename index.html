@@ -245,6 +245,18 @@ nav a:hover{color:var(--text);}
 @media(max-width:980px){
   .hero .wrap{grid-template-columns:1fr;gap:34px;}
   .stage-col{order:-1;}
+
+  /* Am Handy stand der Kaufblock erst nach Fliesstext und Kurzdaten - also
+     weit unter der Falz. Die Spalte wird zur Flexspalte, damit Preis und
+     Kaufbutton direkt hinter die Ueberschrift rutschen; die Erlaeuterung
+     kommt danach. Am Desktop bleibt die Reihenfolge unveraendert. */
+  .hero-copy{display:flex;flex-direction:column;}
+  .hero-copy .eyebrow{order:1;}
+  .hero-copy h1{order:2;}
+  .hero-copy .buy{order:3;}
+  .hero-copy .sub{order:4;}
+  .hero-copy .facts{order:5;}
+  .hero-copy .sub{margin-top:30px;}
 }
 
 .eyebrow{color:var(--cta);margin:0 0 20px;display:flex;align-items:center;gap:10px;}
@@ -566,7 +578,10 @@ section{position:relative;z-index:2;}
 /* ==========================================================================
    FUSS
    ========================================================================== */
-footer{position:relative;z-index:2;border-top:1px solid var(--line);background:var(--bg-2);padding-block:40px 34px;}
+footer{
+  position:relative;z-index:2;border-top:1px solid var(--line);background:var(--bg-2);
+  padding-block:40px calc(34px + 76px + env(safe-area-inset-bottom,0px));
+}
 .foot{display:flex;flex-wrap:wrap;gap:26px 40px;justify-content:space-between;align-items:flex-start;}
 .foot nav{display:flex;flex-wrap:wrap;gap:10px 22px;max-width:640px;}
 .foot nav a{color:var(--mute);font-size:.85rem;transition:color .25s;}
@@ -688,7 +703,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);background:v
 <section class="hero" id="top">
   <div class="wrap">
 
-    <div>
+    <div class="hero-copy">
       <p class="eyebrow mono rv in">Sofort lieferbar <b>·</b> 3 Farben</p>
       <h1 class="rv in" data-d="1">Akku leer?<br><em>Nie wieder.</em></h1>
       <p class="sub rv in" data-d="2">
@@ -1268,16 +1283,23 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);background:v
   var head = document.getElementById('head');
   var buybar = document.getElementById('buybar');
   var buyBlock = document.getElementById('kaufen');
+  var mainBuyBtn = document.querySelector('.buy [data-checkout]');
 
   function onScroll(){
     var y = window.scrollY;
     head.classList.toggle('stuck', y > 20);
 
-    /* Kaufleiste erst zeigen, wenn der Kaufblock oben durch ist. */
-    if (buyBlock) {
-      var past = buyBlock.getBoundingClientRect().bottom < 0;
-      buybar.classList.toggle('show', past);
-      head.classList.toggle('has-bar', past);
+    /* Die Leiste zeigt sich, sobald der eigentliche Kaufbutton nicht mehr im
+       Bild ist - nicht erst, wenn der Kaufblock oben hinausgescrollt wurde.
+       Das macht den Unterschied am Handy: dort liegt der Button beim Laden
+       noch unter der Falz, also gehoert die Leiste sofort hin. Am Desktop
+       steht der Button gleich im Bild, dort bleibt sie zunaechst weg. */
+    var ref = mainBuyBtn || buyBlock;
+    if (ref) {
+      var rr = ref.getBoundingClientRect();
+      var sichtbar = rr.bottom > 0 && rr.top < window.innerHeight;
+      buybar.classList.toggle('show', !sichtbar);
+      head.classList.toggle('has-bar', !sichtbar);
     }
 
     var proof = document.getElementById('proofImg');
