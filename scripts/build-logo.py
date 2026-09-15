@@ -76,16 +76,45 @@ def umfaerben(im, maske):
     return neu
 
 
-def abzeichen(gesicht, px, kopf=0.92, oben=0.085, ring=0.019):
-    C = px * 4                                  # intern vierfach fuer saubere Kanten
+def kopf_ausschnitt(maske):
+    """Ausschnitt vom Haaransatz bis zum Kinn bestimmen.
+
+    Unterhalb des Kinns laeuft die Silhouette in Hals und Schulter aus. Als
+    Ende wird die Zeile genommen, ab der die Breite unter ein Fuenftel des
+    Maximums faellt - das ist verlaesslicher als ein fester Pixelwert.
+    """
+    a = np.asarray(maske)
+    breite = (a > 128).sum(axis=1)
+    zeilen = np.nonzero(breite)[0]
+    oben = int(zeilen[0])
+    maxb = int(breite.max())
+    mitte = (oben + int(zeilen[-1])) // 2
+    unten = int(zeilen[-1])
+    for y in range(mitte, int(zeilen[-1]) + 1):
+        if breite[y] < maxb * 0.20:
+            unten = y
+            break
+    spalten = np.nonzero((a[oben:unten] > 128).sum(axis=0))[0]
+    return int(spalten[0]), oben, int(spalten[-1]) + 1, unten
+
+
+def abzeichen(gesicht, ausschnitt, px, rand=0.10, ring=0.019):
+    """Kopf vollstaendig in den Kreis setzen.
+
+    Der Kopf muss ganz hineinpassen - Ohren und Kinn duerfen nicht am Rand
+    abgeschnitten werden. Deshalb wird nach der laengeren Seite skaliert und
+    ringsum ein Rand freigelassen, statt eine feste Hoehe zu setzen.
+    """
+    C = px * 4
     b = Image.new('RGBA', (C, C), (0, 0, 0, 0))
     ImageDraw.Draw(b).ellipse([0, 0, C - 1, C - 1], fill=ABZEICHEN_BG)
 
-    f = gesicht.crop(AUSSCHNITT)
-    hoehe = int(C * kopf)
-    breite = int(f.width * hoehe / f.height)
-    b.alpha_composite(f.resize((breite, hoehe), Image.LANCZOS),
-                      ((C - breite) // 2, int(C * oben)))
+    f = gesicht.crop(ausschnitt)
+    platz = C * (1 - 2 * rand)
+    faktor = min(platz / f.width, platz / f.height)
+    ww, hh = max(1, int(f.width * faktor)), max(1, int(f.height * faktor))
+    b.alpha_composite(f.resize((ww, hh), Image.LANCZOS),
+                      ((C - ww) // 2, (C - hh) // 2))
 
     kreis = Image.new('L', (C, C), 0)
     ImageDraw.Draw(kreis).ellipse([0, 0, C - 1, C - 1], fill=255)
@@ -100,7 +129,8 @@ def abzeichen(gesicht, px, kopf=0.92, oben=0.085, ring=0.019):
 im = Image.open(QUELLBILD).convert('RGB').resize((ARBEIT, ARBEIT), Image.LANCZOS)
 maske = freistellen(im)
 gesicht = umfaerben(im, maske)
-AUSSCHNITT = maske.getbbox()[0], 19, maske.getbbox()[2], 940
+AUSSCHNITT = kopf_ausschnitt(maske)
+print('Kopf-Ausschnitt:', AUSSCHNITT)
 
 ZIELE = {
     'assets/brand/voltiq-mark-512.png': 512,
@@ -112,7 +142,7 @@ ZIELE = {
 }
 for pfad, px in ZIELE.items():
     ziel = os.path.join(WURZEL, pfad)
-    abzeichen(gesicht, px).save(ziel, optimize=True)
+    abzeichen(gesicht, AUSSCHNITT, px).save(ziel, optimize=True)
     print('%-42s %4d px  %6d B' % (pfad, px, os.path.getsize(ziel)))
 
 # Freigestelltes Gesicht ohne Abzeichen - fuer den Startbildschirm.

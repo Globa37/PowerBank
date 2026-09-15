@@ -60,6 +60,12 @@ Zwei Dinge, die beim Nachbauen leicht schiefgehen:
   stanzt Loecher ins Gesicht. Das Skript flutet deshalb nur vom Bildrand.
 - **Groesse.** Unter etwa 30 px zerfaellt ein Gesicht zu Matsch. Deshalb steht
   das Zeichen in der Kopfzeile auf 34 px und nicht kleiner.
+- **Einpassung nicht schaetzen.** Der Kopf muss ganz in den Kreis passen,
+  Ohren und Kinn duerfen nicht am Rand abgeschnitten werden. Das Skript
+  bestimmt den Ausschnitt aus der Silhouette (Ende dort, wo die Breite unter
+  ein Fuenftel des Maximums faellt - also am Hals) und skaliert nach der
+  laengeren Seite mit 10 Prozent Rand. Feste Prozentwerte hatten das Kinn
+  um ein halbes Prozent ueber den Kreisrand geschoben.
 
 Fuer den Browser-Tab bleibt es beim Blitz (`assets/favicon.svg`): bei 16 px
 ist ein Gesicht nicht mehr lesbar, ein Blitz schon. Beide gehoeren zum selben
