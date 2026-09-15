@@ -28,6 +28,14 @@
     sku: 'VQ-MAG-5000',
     name: 'VOLTIQ MAG',
     priceCents: 2999,            // Verkaufspreis in Cent
+
+    /* Referenzpreis fuer die Ersparnis-Anzeige, in Cent.
+       ACHTUNG: Nach Paragraph 11 PAngV darf eine Preisermaessigung nur mit
+       dem NIEDRIGSTEN Preis der letzten 30 Tage beworben werden. Wurde das
+       Geraet nie zu diesem Preis angeboten, ist die Angabe ein Mondpreis und
+       abmahnfaehig. Auf null setzen, dann verschwindet die gesamte
+       Angebots-Auszeichnung ueberall auf der Seite. */
+    listPriceCents: 3500,
     currency: 'EUR',
     colors: {
       silber: { label: 'Titan Silber',   variant: null },  // TODO: Varianten-ID
@@ -176,6 +184,30 @@
       var text = formatPrice(PRODUCT.priceCents);
       document.querySelectorAll('[data-price]').forEach(function (el) {
         el.textContent = text;
+      });
+
+      /* Angebot. Ohne listPriceCents - oder wenn er nicht ueber dem
+         Verkaufspreis liegt - wird alles mit data-angebot ausgeblendet,
+         statt eine Ersparnis von null auszuweisen. */
+      var alt = PRODUCT.listPriceCents;
+      var gueltig = !!alt && alt > PRODUCT.priceCents;
+      var proz = gueltig
+        ? Math.round((1 - PRODUCT.priceCents / alt) * 100)
+        : 0;
+
+      document.querySelectorAll('[data-angebot]').forEach(function (el) {
+        el.hidden = !gueltig;
+      });
+      if (!gueltig) return;
+
+      document.querySelectorAll('[data-list-price]').forEach(function (el) {
+        el.textContent = formatPrice(alt);
+      });
+      document.querySelectorAll('[data-rabatt]').forEach(function (el) {
+        el.textContent = '\u2212' + proz + '\u202f%';
+      });
+      document.querySelectorAll('[data-ersparnis]').forEach(function (el) {
+        el.textContent = formatPrice(alt - PRODUCT.priceCents);
       });
     }
   };

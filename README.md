@@ -186,7 +186,13 @@ UN38.3-Prüfnachweis.
   Textform mitgeliefert werden.
 - Beworben werden nur die gesetzlichen 14 Tage Widerruf. Eine längere
   freiwillige Frist wird mit der Werbung verbindlich.
-- Keine durchgestrichenen „Statt“-Preise ohne echte 30-Tage-Historie (PAngV).
+- **Der Streichpreis ist scharf gestellt.** `PRODUCT.listPriceCents` in
+  `assets/checkout.js` steht auf 3500, die Seite wirbt also mit „statt
+  35,00 €“. Nach § 11 PAngV darf eine Preisermäßigung nur mit dem
+  **niedrigsten Preis der letzten 30 Tage** beworben werden. Wurde das Gerät
+  nie zu 35 € angeboten, ist das ein Mondpreis und abmahnfähig. Auf `0`
+  setzen, dann verschwindet die gesamte Angebots-Auszeichnung von der Seite —
+  Badge, Streichpreis und Prozentangabe.
 
 **Nach dem Deploy prüfen:**
 

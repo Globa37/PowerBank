@@ -101,10 +101,13 @@
 
   --maxw:1240px;
   --gut:clamp(20px,5vw,64px);
+  /* Die Kaufleiste steht fest am unteren Rand. Ihre Hoehe wird unten am
+     Dokument reserviert, sonst liegt sie auf dem letzten Inhalt. */
+  --leiste:calc(68px + env(safe-area-inset-bottom,0px));
   --sec:clamp(44px,5.6vw,76px);
   --r:18px;
   --ease:cubic-bezier(.22,1,.36,1);
-  --fs-display:clamp(2.6rem,6.6vw,5rem);
+  --fs-display:clamp(2.5rem,6vw,4.6rem);
 }
 
 *{box-sizing:border-box;}
@@ -114,6 +117,7 @@ body{
   font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
   font-size:1rem;line-height:1.65;overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
+  padding-bottom:var(--leiste);
 }
 img{max-width:100%;display:block;}
 a{color:inherit;text-decoration:none;}
@@ -200,10 +204,7 @@ header{
   border-bottom:1px solid transparent;transition:border-color .4s,background .4s;
 }
 header.stuck{border-bottom-color:var(--line);background:rgba(7,8,10,.9);}
-/* Sobald die Kaufleiste unten steht, fuehrt sie - der Kopf tritt zurueck. */
-header.has-bar .btn-buy{opacity:0;pointer-events:none;transform:translateY(-6px);}
-header .btn-buy{transition:opacity .35s var(--ease),transform .35s var(--ease);}
-header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:20px;}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:58px;gap:20px;}
 .brand{display:flex;align-items:center;gap:10px;font-family:'Inter Tight',sans-serif;font-weight:700;letter-spacing:.07em;font-size:1.02rem;}
 /* Das Portraet ist das Markenzeichen. Unter etwa 34 px zerfaellt ein Gesicht
    zu Matsch - deshalb hier nicht kleiner setzen. */
@@ -245,7 +246,7 @@ nav a:hover{color:var(--text);}
 /* ==========================================================================
    HERO = KONFIGURATOR
    ========================================================================== */
-.hero{position:relative;z-index:2;padding-block:clamp(36px,4.4vw,56px) clamp(40px,5vw,64px);}
+.hero{position:relative;z-index:2;padding-block:clamp(20px,2.4vw,32px) clamp(28px,3.4vw,44px);}
 .hero .wrap{
   display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.02fr);
   gap:clamp(28px,5vw,72px);align-items:center;
@@ -267,14 +268,21 @@ nav a:hover{color:var(--text);}
   .hero-copy .sub{margin-top:30px;}
 }
 
-.eyebrow{color:var(--cta);margin:0 0 20px;display:flex;align-items:center;gap:10px;}
+.eyebrow{color:var(--cta);margin:0 0 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+/* Der Angebots-Hinweis steht dauerhaft ueber der Ueberschrift. */
+.deal{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--cta);color:#0F0703;
+  padding:4px 10px;border-radius:999px;
+  font-weight:700;letter-spacing:.08em;
+}
 .eyebrow b{color:var(--text);font-weight:500;}
 h1{font-size:var(--fs-display);font-weight:700;line-height:.94;letter-spacing:-.042em;}
 h1 em{font-style:normal;color:var(--cta);}
-.sub{color:var(--dim);font-size:clamp(1.04rem,1.4vw,1.2rem);line-height:1.6;margin:24px 0 0;max-width:28em;}
+.sub{color:var(--dim);font-size:clamp(1.02rem,1.3vw,1.14rem);line-height:1.58;margin:16px 0 0;max-width:28em;}
 
 /* Kurzdaten direkt unter der Überschrift statt eigener Sektion. */
-.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px;}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;}
 .facts li{
   list-style:none;padding:8px 15px;border-radius:999px;
   border:1px solid var(--line);background:rgba(255,255,255,.028);
@@ -284,7 +292,7 @@ h1 em{font-style:normal;color:var(--cta);}
 
 /* --- Kaufblock ----------------------------------------------------------- */
 .buy{
-  margin-top:34px;padding:clamp(22px,2.4vw,30px);border-radius:calc(var(--r) + 4px);
+  margin-top:22px;padding:clamp(18px,2vw,24px);border-radius:calc(var(--r) + 4px);
   border:1px solid var(--line);background:rgba(17,20,25,.62);
   backdrop-filter:blur(12px);
   position:relative;overflow:hidden;
@@ -301,13 +309,27 @@ h1 em{font-style:normal;color:var(--cta);}
 .chosen{font-family:'Inter Tight',sans-serif;font-weight:600;font-size:1.06rem;}
 .chosen small{display:block;color:var(--mute);font-weight:400;font-size:.8rem;margin-top:2px;}
 .price{text-align:right;}
+/* Angebot: Streichpreis und Ersparnis stehen ueber dem Verkaufspreis.
+   Sichtbar wird der Block erst, wenn checkout.js einen gueltigen
+   Referenzpreis findet - sonst bliebe ein leeres "statt" stehen. */
+.angebot{
+  display:flex;align-items:center;justify-content:flex-end;gap:9px;
+  margin-bottom:6px;
+}
+.angebot s{color:var(--mute);font-size:.95rem;text-decoration-thickness:1.5px;}
+.angebot em{
+  font-style:normal;font-family:'Inter Tight',sans-serif;font-weight:700;
+  font-size:.78rem;letter-spacing:.02em;
+  color:#0F0703;background:var(--cta);
+  padding:3px 8px;border-radius:6px;white-space:nowrap;
+}
 .price b{font-family:'Inter Tight',sans-serif;font-size:2rem;font-weight:700;letter-spacing:-.03em;display:block;line-height:1;}
 .price small{color:var(--mute);font-size:.76rem;}
-.buy .btn{width:100%;margin-top:20px;}
+.buy .btn{width:100%;margin-top:16px;}
 
 /* Mengenwahl. checkout.js liest data-quantity vom Button - hier wird es
    nur gesetzt, der Adapter bleibt unberuehrt. */
-.qty{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:22px;}
+.qty{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:16px;}
 .qty-label{color:var(--mute);}
 .qty-ctl{display:flex;align-items:center;border:1px solid var(--line);border-radius:999px;overflow:hidden;}
 .qty-ctl button{
@@ -589,16 +611,15 @@ section{position:relative;z-index:2;}
    ========================================================================== */
 .buybar{
   position:fixed;left:0;right:0;bottom:0;z-index:70;
-  display:none;align-items:center;gap:14px;
+  display:flex;align-items:center;gap:14px;
   padding:12px 16px calc(12px + env(safe-area-inset-bottom));
-  background:rgba(7,8,10,.93);backdrop-filter:blur(18px);
-  border-top:1px solid var(--line);
-  transform:translateY(110%);transition:transform .45s var(--ease);
+  background:rgba(7,8,10,.94);backdrop-filter:blur(18px);
+  border-top:1px solid var(--line-2);
 }
-.buybar.show{transform:translateY(0);}
 .buybar .bb-info{font-size:.82rem;color:var(--dim);line-height:1.3;}
+.bb-preis{display:flex;align-items:baseline;gap:8px;}
+.bb-preis s{color:var(--mute);font-size:.84rem;text-decoration-thickness:1.5px;}
 .buybar .bb-info b{display:block;color:var(--text);font-family:'Inter Tight',sans-serif;font-size:1.06rem;font-weight:700;}
-.buybar.show{display:flex;}
 /* Innen wie der Seiteninhalt begrenzen, sonst zerfaellt die Leiste auf
    grossen Schirmen in zwei weit auseinanderliegende Haelften. */
 .bb-inner{
@@ -610,10 +631,7 @@ section{position:relative;z-index:2;}
 /* ==========================================================================
    FUSS
    ========================================================================== */
-footer{
-  position:relative;z-index:2;border-top:1px solid var(--line);background:var(--bg-2);
-  padding-block:40px calc(34px + 76px + env(safe-area-inset-bottom,0px));
-}
+footer{position:relative;z-index:2;border-top:1px solid var(--line);background:var(--bg-2);padding-block:40px 34px;}
 .foot{display:flex;flex-wrap:wrap;gap:26px 40px;justify-content:space-between;align-items:flex-start;}
 .foot nav{display:flex;flex-wrap:wrap;gap:10px 22px;max-width:640px;}
 .foot nav a{color:var(--mute);font-size:.85rem;transition:color .25s;}
@@ -865,7 +883,10 @@ footer{
   <div class="wrap">
 
     <div class="hero-copy">
-      <p class="eyebrow mono rv in">Sofort lieferbar <b>·</b> 3 Farben</p>
+      <p class="eyebrow mono rv in">
+        <span class="deal" data-angebot hidden>Angebot <span data-rabatt>&minus;14&#8239;%</span></span>
+        Sofort lieferbar <b>·</b> 3 Farben
+      </p>
       <h1 class="rv in" data-d="1">Akku leer?<br><em>Nie wieder.</em></h1>
       <p class="sub rv in" data-d="2">
         Die VOLTIQ MAG haftet magnetisch hinten am iPhone und lädt sofort los.
@@ -887,6 +908,10 @@ footer{
             <small id="cDesc">Gebürstetes Aluminium mit polierter Fase</small>
           </div>
           <div class="price">
+            <span class="angebot" data-angebot hidden>
+              <s data-list-price>35,00&nbsp;€</s>
+              <em data-rabatt>&minus;14&#8239;%</em>
+            </span>
             <b data-price>29,99&nbsp;€</b>
             <small>inkl. MwSt.<!-- TODO: nur setzen, wenn Versand wirklich frei ist --> · versandkostenfrei</small>
           </div>
@@ -1188,7 +1213,10 @@ footer{
 <div class="buybar" id="buybar">
   <div class="bb-inner">
     <div class="bb-info">
-      <b data-price id="bbPrice">29,99&nbsp;€</b>
+      <span class="bb-preis">
+        <b data-price id="bbPrice">29,99&nbsp;€</b>
+        <s data-list-price data-angebot hidden>35,00&nbsp;€</s>
+      </span>
       <span id="bbColor">Titan Silber</span>
     </div>
     <button type="button" class="btn btn-buy btn-sm" data-checkout data-quantity="1">Jetzt kaufen</button>
@@ -1301,11 +1329,19 @@ footer{
     }
 
     /* Die Leiste unten zeigt die Summe, nicht den Stueckpreis - sonst steht
-       dort eine andere Zahl als im Kaufblock. */
+       dort eine andere Zahl als im Kaufblock. Der Streichpreis muss dabei
+       mitwachsen, sonst behauptet er bei drei Stueck eine falsche Ersparnis. */
     if (bbPrice && cents) {
       bbPrice.textContent = fmt(cents * qty);
       bbCount.hidden = qty < 2;
       bbCount.textContent = ' · ' + qty + ' Stück';
+
+      var listeCent = window.VOLTIQ.product.listPriceCents;
+      if (listeCent && listeCent > cents) {
+        document.querySelectorAll('[data-list-price]').forEach(function (el) {
+          el.textContent = fmt(listeCent * qty);
+        });
+      }
     }
   }
 
@@ -1448,26 +1484,14 @@ footer{
   }
 
   var head = document.getElementById('head');
-  var buybar = document.getElementById('buybar');
-  var buyBlock = document.getElementById('kaufen');
-  var mainBuyBtn = document.querySelector('.buy [data-checkout]');
 
   function onScroll(){
     var y = window.scrollY;
     head.classList.toggle('stuck', y > 20);
 
-    /* Die Leiste zeigt sich, sobald der eigentliche Kaufbutton nicht mehr im
-       Bild ist - nicht erst, wenn der Kaufblock oben hinausgescrollt wurde.
-       Das macht den Unterschied am Handy: dort liegt der Button beim Laden
-       noch unter der Falz, also gehoert die Leiste sofort hin. Am Desktop
-       steht der Button gleich im Bild, dort bleibt sie zunaechst weg. */
-    var ref = mainBuyBtn || buyBlock;
-    if (ref) {
-      var rr = ref.getBoundingClientRect();
-      var sichtbar = rr.bottom > 0 && rr.top < window.innerHeight;
-      buybar.classList.toggle('show', !sichtbar);
-      head.classList.toggle('has-bar', !sichtbar);
-    }
+    /* Die Kaufleiste steht dauerhaft. Frueher fuhr sie je nach Scrollstand
+       ein und aus - das liess den Kaufweg wandern, statt ihn an einer festen
+       Stelle zu halten. */
 
     var proof = document.getElementById('proofImg');
     if (proof) {
