@@ -29,7 +29,7 @@
   seine Signalwirkung.
 
   TODO vor Launch (Geschäftsentscheidungen, hier nur Platzhalter):
-    - Preis (aktuell 49,90 €, steht in assets/checkout.js)
+    - Preis (aktuell 29,99 €, steht in assets/checkout.js)
     - Versandherkunft / Lieferzeit / Verfügbarkeit
     - Keine durchgestrichenen "Statt"-Preise ohne echte 30-Tage-Historie (PAngV)
   ===========================================================================
@@ -604,14 +604,60 @@ footer{
    Vollbild-Layer waere sonst eine gesperrte Seite.
    ========================================================================== */
 .intro{
+  /* ------------------------------------------------------------------------
+     KATEGORIE-ANSTRICH
+     Der Startbildschirm traegt das Thema des Shops. Fuer einen anderen Shop
+     nur diese vier Werte tauschen - Verlauf, Raster und Entladungsringe
+     ziehen automatisch mit.
+
+     Hier: Energie und Strom. Beispiele fuer weitere Shops -
+       Audio    --intro-hoch:#2A1440  --intro-funke:#B36BFF
+       Outdoor  --intro-hoch:#0E2A1C  --intro-funke:#4ADE80
+       Werkzeug --intro-hoch:#33240A  --intro-funke:#FFC53D
+     --------------------------------------------------------------------- */
+  --intro-tief:#05080F;
+  --intro-hoch:#122544;
+  --intro-funke:var(--cta);
+  /* Bewusst als fertiges rgba statt color-mix: waere color-mix im Browser
+     unbekannt, verwuerfe er die ganze background-Deklaration und der
+     Vorhang stuende durchsichtig ueber der Seite. */
+  --intro-funke-weich:rgba(255,106,43,.16);
+  --intro-raster:rgba(120,170,255,.07);
+
   position:fixed;inset:0;z-index:200;display:grid;place-items:center;
-  background:var(--bg);
+  overflow:hidden;
+  background-color:var(--intro-tief);
+  background-image:
+    radial-gradient(ellipse 72% 56% at 50% 47%, var(--intro-hoch) 0%, transparent 70%),
+    radial-gradient(ellipse 34% 30% at 50% 47%, var(--intro-funke-weich) 0%, transparent 70%);
   animation:introRaus .55s var(--ease) 1.45s forwards;
+}
+/* Spannungsraster - dasselbe Motiv wie im Seitenhintergrund, nur schwaecher. */
+.intro::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(var(--intro-raster) 1px, transparent 1px),
+    linear-gradient(90deg, var(--intro-raster) 1px, transparent 1px);
+  background-size:54px 54px;
+  mask-image:radial-gradient(circle at 50% 47%, #000 12%, transparent 66%);
+  -webkit-mask-image:radial-gradient(circle at 50% 47%, #000 12%, transparent 66%);
 }
 @keyframes introRaus{to{opacity:0;visibility:hidden;pointer-events:none;}}
 .intro-in{display:grid;justify-items:center;gap:26px;}
 
 .intro-badge{position:relative;width:132px;height:132px;display:grid;place-items:center;}
+/* Entladung: zwei Ringe laufen nach aussen, wie ein Feld das sich aufbaut. */
+.intro-badge i{
+  position:absolute;width:100%;aspect-ratio:1;border-radius:50%;
+  border:1px solid var(--intro-funke);opacity:0;
+  animation:entladung 1.9s cubic-bezier(.2,.7,.3,1) infinite;
+}
+.intro-badge i:nth-of-type(2){animation-delay:.65s;}
+@keyframes entladung{
+  0%{transform:scale(.72);opacity:0;}
+  18%{opacity:.42;}
+  100%{transform:scale(1.85);opacity:0;}
+}
 .intro-badge img{
   width:108px;height:108px;border-radius:50%;
   animation:introKommt .8s var(--ease) both;
@@ -713,7 +759,7 @@ footer{
         "@type": "Offer",
         "url": "https://voltiq.de/#kaufen",
         "priceCurrency": "EUR",
-        "price": "49.90",
+        "price": "29.99",
         "priceValidUntil": "2027-12-31",
         "availability": "https://schema.org/InStock",
         "itemCondition": "https://schema.org/NewCondition",
@@ -734,6 +780,7 @@ footer{
     <div class="intro-badge">
       <img src="assets/brand/voltiq-mark-192.png" alt="" width="192" height="192" fetchpriority="high">
       <svg class="intro-ring" viewBox="0 0 132 132" aria-hidden="true"><circle cx="66" cy="66" r="63"/></svg>
+      <i aria-hidden="true"></i><i aria-hidden="true"></i>
     </div>
     <div class="intro-name">VOLT<svg class="bolt" viewBox="0 0 12 24" aria-hidden="true"><path d="M7.7 0 1.1 13.2h4.1L4.3 24 10.9 10.5H6.7z"/></svg>Q</div>
   </div>
@@ -817,7 +864,7 @@ footer{
             <small id="cDesc">Gebürstetes Aluminium mit polierter Fase</small>
           </div>
           <div class="price">
-            <b data-price>49,90&nbsp;€</b>
+            <b data-price>29,99&nbsp;€</b>
             <small>inkl. MwSt.<!-- TODO: nur setzen, wenn Versand wirklich frei ist --> · versandkostenfrei</small>
           </div>
         </div>
@@ -982,7 +1029,7 @@ footer{
       <p>Der Magnetring rastet von selbst mittig ein und hält auch in der
          Jackentasche. Abziehen geht rückstandslos — keine Klebepads, keine
          extra Halterung.</p>
-      <button type="button" class="btn btn-buy" data-checkout data-quantity="1">Jetzt kaufen — <span data-price>49,90&nbsp;€</span></button>
+      <button type="button" class="btn btn-buy" data-checkout data-quantity="1">Jetzt kaufen — <span data-price>29,99&nbsp;€</span></button>
     </div>
   </div>
 </div>
@@ -1106,7 +1153,7 @@ footer{
     <div class="rv">
       <h2>Drei Farben.<br>Eine Entscheidung.</h2>
       <p>Heute bestellt, morgen hängt sie an deinem Handy.</p>
-      <button type="button" class="btn btn-buy" data-checkout data-quantity="1">Jetzt kaufen — <span data-price>49,90&nbsp;€</span></button>
+      <button type="button" class="btn btn-buy" data-checkout data-quantity="1">Jetzt kaufen — <span data-price>29,99&nbsp;€</span></button>
     </div>
   </div>
 </section>
@@ -1115,7 +1162,7 @@ footer{
 <div class="buybar" id="buybar">
   <div class="bb-inner">
     <div class="bb-info">
-      <b data-price id="bbPrice">49,90&nbsp;€</b>
+      <b data-price id="bbPrice">29,99&nbsp;€</b>
       <span id="bbColor">Titan Silber</span>
     </div>
     <button type="button" class="btn btn-buy btn-sm" data-checkout data-quantity="1">Jetzt kaufen</button>

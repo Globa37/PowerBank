@@ -27,7 +27,7 @@
     provider: 'none',            // 'none' | 'stripe' | 'shopify' | 'custom'
     sku: 'VQ-MAG-5000',
     name: 'VOLTIQ MAG',
-    priceCents: 4990,            // TODO: echter Verkaufspreis, in Cent
+    priceCents: 2999,            // Verkaufspreis in Cent
     currency: 'EUR',
     colors: {
       silber: { label: 'Titan Silber',   variant: null },  // TODO: Varianten-ID
