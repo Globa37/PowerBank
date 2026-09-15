@@ -1,0 +1,13 @@
+# VOLTIQ — robots.txt
+# TODO Domain: voltiq.de durch die echte Domain ersetzen (auch in sitemap.xml
+# und in den canonical-/og:url-Tags der HTML-Dateien).
+
+User-agent: *
+Allow: /
+
+# Rechtstexte gehoeren nicht in den Index, sollen aber erreichbar und
+# crawlbar bleiben. Das steuert das robots-Meta der jeweiligen Seite
+# (noindex,follow) - hier nichts sperren, sonst liest der Crawler das
+# noindex nie.
+
+Sitemap: https://voltiq.de/sitemap.xml
