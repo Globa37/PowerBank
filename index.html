@@ -473,7 +473,33 @@ section{position:relative;z-index:2;}
   .spec:nth-last-child(-n+2){border-bottom:0;}
 }
 .spec dt{color:var(--mute);font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;}
-.spec dd{margin:9px 0 0;font-family:'Inter Tight',sans-serif;font-weight:600;font-size:1.06rem;}
+.spec dd{margin:9px 0 0;font-family:'Inter Tight',sans-serif;font-weight:600;font-size:clamp(.92rem,1.1vw,1.06rem);}
+
+/* ==========================================================================
+   SCHUTZSCHALTUNGEN — ein Akku am eigenen Telefon ist Vertrauenssache.
+   ========================================================================== */
+.safety{padding-bottom:var(--sec);}
+.safety .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.6vw,20px);}
+@media(max-width:980px){.safety .wrap{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:520px){.safety .wrap{grid-template-columns:1fr;}}
+.safety-head{grid-column:1/-1;max-width:34em;margin-bottom:clamp(10px,1.6vw,20px);}
+.safety-head h2{font-size:clamp(1.5rem,3vw,2.1rem);font-weight:700;line-height:1.1;}
+.safety-head p{color:var(--dim);margin:16px 0 0;}
+.safe{
+  padding:24px 22px 26px;border-radius:var(--r);
+  border:1px solid var(--line);background:rgba(255,255,255,.022);
+  transition:border-color .45s,transform .45s var(--ease);
+}
+.safe:hover{border-color:var(--line-2);transform:translateY(-3px);}
+.safe-ico{
+  width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+  margin-bottom:16px;background:rgba(255,106,43,.12);
+  border:1px solid rgba(255,106,43,.28);
+}
+.safe-ico svg{width:17px;height:17px;stroke:var(--cta);fill:none;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round;}
+.safe h3{font-size:.99rem;font-weight:600;margin:0 0 7px;}
+.safe p{font-size:.87rem;color:var(--mute);margin:0;line-height:1.55;}
 
 /* ==========================================================================
    EINWÄNDE
@@ -857,7 +883,45 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);background:v
       <div class="spec"><dt>Gehäuse</dt><dd>Aluminium + ABS</dd></div>
       <div class="spec"><dt>Zelle</dt><dd>Li-Polymer</dd></div>
       <div class="spec"><dt>Energie</dt><dd>18,5 Wh</dd></div>
+      <div class="spec"><dt>USB-C Eingang</dt><dd>5 V/2,5 A · 9 V/2 A · 12 V/1,5 A</dd></div>
+      <div class="spec"><dt>USB-C Ausgang</dt><dd>5 V/3 A · 9 V/2,22 A · 12 V/1,67 A</dd></div>
+      <div class="spec"><dt>Kompatibilität</dt><dd>MagSafe &amp; Qi</dd></div>
+      <div class="spec"><dt>Lieferumfang</dt><dd>Powerbank, USB-C Kabel</dd></div>
     </dl>
+  </div>
+</section>
+
+<!-- ============================ SCHUTZSCHALTUNGEN ============================ -->
+<section class="safety">
+  <div class="wrap">
+    <div class="safety-head rv">
+      <p class="eyebrow mono">Schutzschaltungen</p>
+      <h2>Vierfach abgesichert.</h2>
+      <p>Ein Akku, der dauerhaft am eigenen Telefon hängt, ist Vertrauenssache.
+         Die Steuerplatine überwacht jeden Ladevorgang und regelt ab, bevor
+         etwas passiert.</p>
+    </div>
+
+    <div class="safe rv">
+      <div class="safe-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.4 9.2 8 10 4.6-.8 8-5 8-10V6z"/></svg></div>
+      <h3>Überladeschutz</h3>
+      <p>Trennt die Zufuhr, sobald die Zelle voll ist.</p>
+    </div>
+    <div class="safe rv" data-d="1">
+      <div class="safe-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 7h11a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"/><path d="M22 11v2"/><path d="M7 11v2"/></svg></div>
+      <h3>Tiefentladeschutz</h3>
+      <p>Schont die Zelle und verlängert die Lebensdauer.</p>
+    </div>
+    <div class="safe rv" data-d="2">
+      <div class="safe-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></div>
+      <h3>Kurzschlussschutz</h3>
+      <p>Schaltet bei Fehlströmen sofort ab.</p>
+    </div>
+    <div class="safe rv" data-d="3">
+      <div class="safe-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20v-8"/><path d="m8 16 4 4 4-4"/><path d="M12 4v4"/></svg></div>
+      <h3>Unterspannungsschutz</h3>
+      <p>Hält die Ausgangsspannung stabil im sicheren Bereich.</p>
+    </div>
   </div>
 </section>
 
@@ -865,6 +929,21 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);background:v
 <section class="faq" id="fragen">
   <div class="wrap">
     <h2 class="rv">Bevor du bestellst</h2>
+
+    <details class="q rv">
+      <summary>Wie oft lädt sie mein Handy auf?</summary>
+      <p>Per Kabel etwa einmal voll. Kabellos geht durch die Übertragung Energie
+         als Wärme verloren — rechne dort realistisch mit 60 bis 70 Prozent einer
+         Ladung. Wir nennen lieber den Wert, den du tatsächlich bekommst, als die
+         Laborzahl vom Datenblatt.</p>
+    </details>
+
+    <details class="q rv">
+      <summary>Wie lange, bis sie selbst wieder voll ist?</summary>
+      <p>Mit einem USB-C Netzteil ab 18 W ist sie in rund zwei Stunden wieder
+         einsatzbereit. Das Kabel liegt bei, das Netzteil nicht — dafür genügt
+         jedes USB-C Ladegerät, das du schon hast.</p>
+    </details>
 
     <details class="q rv">
       <summary>Passt die auf mein Handy?</summary>

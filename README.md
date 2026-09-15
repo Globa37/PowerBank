@@ -38,6 +38,32 @@ vorhanden sind noch 05 (Hero iPhone), 06 (Desk) und 09 (Travel). Die Erzeugungss
 `scripts/fetch-fonts.py`) sind in älteren Kommentaren erwähnt, aber nie ins
 Repo gelangt — wer die Bilder neu ableiten will, muss sie neu schreiben.
 
+### Herkunft der Bilder
+
+Die Originale liegen auf dem Higgsfield-CDN und waren in der ersten Fassung
+direkt verlinkt. Die lokalen Ableitungen im Repo stammen von dort. Falls je
+eine größere Auflösung gebraucht wird, sind das die Quellen:
+
+```
+https://d8j0ntlcm91z4.cloudfront.net/user_3JGnRZcljS9ZEfmpThKsT6DATn2/hf_20260914_223113_<ID>.png
+```
+
+| Datei | ID |
+| --- | --- |
+| 01-silber-freigestellt | `e62443dc-bb8e-4de2-a4f7-c129291cdac5` |
+| 02-orange-freigestellt | `5acfb82c-1314-4ef0-9de0-42fe4595c6cc` |
+| 03-blau-freigestellt | `ef09bf6f-ac7c-4806-abcf-0299af2ef2e9` |
+| 04-rueckseite-magnetring | `c7f361ab-771b-4021-876a-7ec947a84fbe` |
+| 05-hero-iphone | `1c15a848-6137-47a3-a574-debdc499ebe7` |
+| 06-desk-szene | `b01a6945-5210-4ab1-afa8-a6ffc04792ad` |
+| 07-makro-detail | `243c4c86-647f-4fbb-9723-028b4805207e` |
+| 08-nacht-lifestyle | `2e3182b9-440b-4a33-afb6-3780c946ecfa` |
+| 09-travel-flatlay | `ccc81738-caf2-45b2-afc5-c4009d02dcd7` |
+| 10-lineup-3-farben | `3f1032ed-1207-4a40-9004-b2191896d0ad` |
+
+Fremdes Hosting ist kein Dauerzustand — die lokalen Kopien im Repo sind die
+maßgeblichen. Die CDN-Links stehen hier nur als Rückfallebene.
+
 ## Deploy zu Vercel
 
 Der Ordner ist eine statische Seite ohne Build. Vercel erkennt das von selbst.
@@ -77,6 +103,20 @@ ist gleichzeitig Batterie, Elektrogerät und kommt in einer Verpackung:
 - [ ] Verpackungen bei LUCID, dazu ein Vertrag mit einem dualen System
 - [ ] UN38.3-Prüfnachweis vom Lieferanten; Akkuversand (UN 3481, Gefahrgut)
       mit dem Versanddienstleister klären
+
+**Lieferant und Herkunft:**
+
+Smilelink, Modell SML-MB1, Guangdong (China). OEM/ODM mit eigenem Logo
+möglich. Vor dem Import zu klären: MOQ und Stückpreis, CE/RoHS, der
+UN38.3-Prüfnachweis.
+
+> **Achtung, Widerspruch:** Die Startseite wirbt mit „Versand aus
+> Deutschland", der Footer mit „Entwickelt in Deutschland". Beides gilt nur,
+> wenn wirklich aus einem deutschen Lager versendet wird. Bei Direktversand
+> aus Guangdong sind beide Aussagen falsch und abmahnfähig — dann müssen
+> stattdessen die echte Herkunft, eine realistische Laufzeit und ein Hinweis
+> auf mögliche Einfuhrabgaben auf der Seite stehen. Das ist vor dem ersten
+> Verkauf zu entscheiden, nicht danach.
 
 **Daten eintragen:**
 
