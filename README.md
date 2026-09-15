@@ -38,6 +38,44 @@ vorhanden sind noch 05 (Hero iPhone), 06 (Desk) und 09 (Travel). Die Erzeugungss
 `scripts/fetch-fonts.py`) sind in älteren Kommentaren erwähnt, aber nie ins
 Repo gelangt — wer die Bilder neu ableiten will, muss sie neu schreiben.
 
+## Markenzeichen
+
+Das Zeichen ist ein Portraet — dasselbe soll ueber alle Shops hinweg
+wiederkehren. Es wird nicht von Hand gepflegt, sondern erzeugt:
+
+```
+pip install Pillow numpy
+python3 scripts/build-logo.py
+```
+
+Quelle ist `assets/brand/portrait-quelle.jpg`. Das Skript stellt den Kopf frei,
+bildet die fuenf Flaechenfarben der Vorlage auf die Markenpalette ab und
+schreibt alle Symbolgroessen (`assets/brand/`, `assets/icon-*.png`,
+`assets/apple-touch-icon.png`).
+
+Zwei Dinge, die beim Nachbauen leicht schiefgehen:
+
+- **Nicht per Farbe freistellen.** Der Hintergrund hat exakt denselben Ton wie
+  die Licht-Flaechen auf Stirn und Wange. Ein globales Ersetzen dieser Farbe
+  stanzt Loecher ins Gesicht. Das Skript flutet deshalb nur vom Bildrand.
+- **Groesse.** Unter etwa 30 px zerfaellt ein Gesicht zu Matsch. Deshalb steht
+  das Zeichen in der Kopfzeile auf 34 px und nicht kleiner.
+
+Fuer den Browser-Tab bleibt es beim Blitz (`assets/favicon.svg`): bei 16 px
+ist ein Gesicht nicht mehr lesbar, ein Blitz schon. Beide gehoeren zum selben
+System — das Portraet ist das Zeichen, der Blitz das Signet, und er steht auch
+an der Stelle des I in VOLT*I*Q.
+
+### Startbildschirm
+
+`index.html` zeigt beim ersten Aufruf je Sitzung einen Vorhang mit Portraet,
+Ladungsring und Schriftzug (`#intro`). Er blendet sich per CSS-Animation aus,
+damit er auch ohne JavaScript verschwindet, **und** wird zusaetzlich per
+`setTimeout` nach 2,6 s entfernt. Die Doppelung ist Absicht: bliebe der
+Vollbild-Layer stehen, waere der Shop unbedienbar — das ist zu teuer, um es
+einer Animation allein zu ueberlassen. Bei `prefers-reduced-motion` entfaellt
+er ganz, und ein Klick schliesst ihn sofort.
+
 ### Herkunft der Bilder
 
 Die Originale liegen auf dem Higgsfield-CDN und waren in der ersten Fassung

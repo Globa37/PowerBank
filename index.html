@@ -205,11 +205,20 @@ header.stuck{border-bottom-color:var(--line);background:rgba(7,8,10,.9);}
 header.has-bar .btn-buy{opacity:0;pointer-events:none;transform:translateY(-6px);}
 header .btn-buy{transition:opacity .35s var(--ease),transform .35s var(--ease);}
 header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:20px;}
-.brand{display:flex;align-items:center;gap:11px;font-family:'Inter Tight',sans-serif;font-weight:700;letter-spacing:.07em;font-size:1.02rem;}
-.brand span{
-  width:7px;height:7px;border-radius:50%;background:var(--cta);
-  box-shadow:0 0 12px rgba(255,106,43,.7);
+.brand{display:flex;align-items:center;gap:10px;font-family:'Inter Tight',sans-serif;font-weight:700;letter-spacing:.07em;font-size:1.02rem;}
+/* Das Portraet ist das Markenzeichen. Unter etwa 34 px zerfaellt ein Gesicht
+   zu Matsch - deshalb hier nicht kleiner setzen. */
+.brand-mark{
+  width:34px;height:34px;border-radius:50%;flex:none;
+  box-shadow:0 0 0 1px rgba(255,255,255,.08), 0 3px 12px rgba(0,0,0,.5);
 }
+.brand-name{display:inline-flex;align-items:center;}
+/* Der Blitz steht an der Stelle des I in VOLTIQ. */
+.bolt{
+  width:.42em;height:1em;margin:0 .04em;fill:var(--cta);
+  filter:drop-shadow(0 0 5px rgba(255,106,43,.55));
+}
+footer .brand-mark{width:30px;height:30px;}
 nav{display:flex;gap:30px;}
 nav a{font-size:.88rem;color:var(--dim);transition:color .25s;}
 nav a:hover{color:var(--text);}
@@ -589,6 +598,49 @@ footer{
 .foot-base{margin-top:28px;padding-top:22px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px 20px;justify-content:space-between;color:var(--mute);font-size:.78rem;}
 
 /* ==========================================================================
+   STARTBILDSCHIRM
+   Blendet sich per CSS-Animation selbst aus. Bewusst ohne JavaScript-Zwang:
+   faellt das Skript aus, verschwindet der Vorhang trotzdem - ein haengender
+   Vollbild-Layer waere sonst eine gesperrte Seite.
+   ========================================================================== */
+.intro{
+  position:fixed;inset:0;z-index:200;display:grid;place-items:center;
+  background:var(--bg);
+  animation:introRaus .55s var(--ease) 1.45s forwards;
+}
+@keyframes introRaus{to{opacity:0;visibility:hidden;pointer-events:none;}}
+.intro-in{display:grid;justify-items:center;gap:26px;}
+
+.intro-badge{position:relative;width:132px;height:132px;display:grid;place-items:center;}
+.intro-badge img{
+  width:108px;height:108px;border-radius:50%;
+  animation:introKommt .8s var(--ease) both;
+}
+@keyframes introKommt{from{opacity:0;transform:scale(.82);}to{opacity:1;transform:none;}}
+
+/* Ladungsring: ein Segment laeuft einmal um das Portraet. */
+.intro-ring{position:absolute;inset:0;transform:rotate(-90deg);}
+.intro-ring circle{
+  fill:none;stroke:var(--cta);stroke-width:2.5;stroke-linecap:round;
+  stroke-dasharray:44 350;stroke-dashoffset:394;
+  filter:drop-shadow(0 0 6px rgba(255,106,43,.8));
+  animation:laden 1.3s cubic-bezier(.5,0,.3,1) .15s both;
+}
+@keyframes laden{to{stroke-dashoffset:0;}}
+
+.intro-name{
+  font-family:'Inter Tight',sans-serif;font-weight:700;
+  font-size:clamp(1.7rem,6vw,2.3rem);letter-spacing:.14em;
+  display:inline-flex;align-items:center;
+  animation:introKommt .7s var(--ease) .3s both;
+}
+.intro-name .bolt{width:.4em;height:1em;animation:zucken 1.1s steps(1,end) .5s 2;}
+@keyframes zucken{0%,100%{opacity:1;}45%{opacity:.25;}55%{opacity:1;}70%{opacity:.4;}}
+
+/* Wer weniger Bewegung wuenscht, bekommt gar keinen Vorhang. */
+@media(prefers-reduced-motion:reduce){.intro{display:none;}}
+
+/* ==========================================================================
    SCROLL-REVEAL + BEWEGUNGSARMUT
    ========================================================================== */
 .rv{opacity:0;transform:translateY(26px);transition:opacity .85s var(--ease),transform .85s var(--ease);}
@@ -676,6 +728,42 @@ footer{
 
 <body>
 
+<!-- ============================ STARTBILDSCHIRM ============================ -->
+<div class="intro" id="intro" role="presentation" aria-hidden="true">
+  <div class="intro-in">
+    <div class="intro-badge">
+      <img src="assets/brand/voltiq-mark-192.png" alt="" width="192" height="192" fetchpriority="high">
+      <svg class="intro-ring" viewBox="0 0 132 132" aria-hidden="true"><circle cx="66" cy="66" r="63"/></svg>
+    </div>
+    <div class="intro-name">VOLT<svg class="bolt" viewBox="0 0 12 24" aria-hidden="true"><path d="M7.7 0 1.1 13.2h4.1L4.3 24 10.9 10.5H6.7z"/></svg>Q</div>
+  </div>
+</div>
+<script>
+(function(){
+  var el = document.getElementById('intro');
+  if (!el) return;
+
+  function weg(){ if (el && el.parentNode) el.parentNode.removeChild(el); el = null; }
+
+  /* Nur beim ersten Aufruf je Sitzung zeigen. Privater Modus kann beim
+     Zugriff auf sessionStorage werfen - deshalb in try. */
+  try{
+    if (sessionStorage.getItem('voltiq-intro')) { weg(); return; }
+    sessionStorage.setItem('voltiq-intro','1');
+  }catch(e){}
+
+  /* Sicherheitsnetz. Der Vorhang blendet sich eigentlich per CSS-Animation
+     aus, damit er auch ohne JavaScript verschwindet. Sollte die Animation
+     aber nicht laufen - abgeschaltet, nicht unterstuetzt, Browser-Eigenart -
+     laege ein Vollbild-Layer ueber der Seite und der Shop waere unbedienbar.
+     Das ist zu teuer, um es einer Animation allein zu ueberlassen. */
+  setTimeout(weg, 2600);
+
+  /* Wer nicht warten will, tippt ihn weg. */
+  el.addEventListener('click', weg);
+})();
+</script>
+
 <!-- ============================ HINTERGRUND ============================ -->
 <div class="bg" aria-hidden="true">
   <div class="aurora"><i></i><i></i><i></i></div>
@@ -688,7 +776,10 @@ footer{
 <!-- ============================ NAVIGATION ============================ -->
 <header id="head">
   <div class="wrap">
-    <a class="brand" href="#top"><span></span>VOLTIQ</a>
+    <a class="brand" href="#top">
+      <img class="brand-mark" src="assets/brand/voltiq-mark-96.png" alt="" width="96" height="96">
+      <span class="brand-name">VOLT<svg class="bolt" viewBox="0 0 12 24" aria-hidden="true"><path d="M7.7 0 1.1 13.2h4.1L4.3 24 10.9 10.5H6.7z"/></svg>Q</span>
+    </a>
     <nav>
       <a href="#gruende">Warum</a>
       <a href="#material">Material</a>
@@ -1035,7 +1126,10 @@ footer{
 <footer>
   <div class="wrap">
     <div class="foot">
-      <a class="brand" href="#top"><span></span>VOLTIQ</a>
+      <a class="brand" href="#top">
+        <img class="brand-mark" src="assets/brand/voltiq-mark-96.png" alt="" width="96" height="96">
+        <span class="brand-name">VOLT<svg class="bolt" viewBox="0 0 12 24" aria-hidden="true"><path d="M7.7 0 1.1 13.2h4.1L4.3 24 10.9 10.5H6.7z"/></svg>Q</span>
+      </a>
       <nav>
         <a href="versand.html">Versand &amp; Lieferung</a>
         <a href="rueckgabe.html">Rückgabe</a>

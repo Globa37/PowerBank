@@ -42,7 +42,17 @@ a:hover{color:#FF8551;}
   font-family:'Inter Tight',sans-serif;font-weight:700;letter-spacing:.06em;
   color:var(--text);text-decoration:none;font-size:1.02rem;
 }
-.brand img{width:22px;height:22px;border-radius:6px;display:block;}
+/* Das Portraet ist das Markenzeichen. Unter etwa 30 px zerfaellt ein Gesicht
+   zu Matsch - deshalb hier nicht kleiner setzen. */
+.brand img{
+  width:30px;height:30px;border-radius:50%;display:block;flex:none;
+  box-shadow:0 0 0 1px rgba(255,255,255,.08);
+}
+/* Der Blitz steht an der Stelle des I in VOLTIQ. */
+.bolt{
+  width:.42em;height:1em;margin:0 .04em;fill:var(--accent);vertical-align:-.08em;
+  filter:drop-shadow(0 0 5px rgba(255,106,43,.5));
+}
 .back{
   font-family:'JetBrains Mono',ui-monospace,monospace;
   font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
